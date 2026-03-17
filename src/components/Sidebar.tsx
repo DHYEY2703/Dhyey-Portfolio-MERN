@@ -12,7 +12,7 @@ const Sidebar: React.FC = () => {
 
         <div className="info-content">
           <h1 className="name" title="Dhyey Barbhaya">Dhyey Barbhaya</h1>
-          <p className="title">Web developer</p>
+          <p className="title">Full Stack Developer</p>
         </div>
 
         <button 

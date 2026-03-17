@@ -3,8 +3,27 @@ import React from 'react';
 const Resume: React.FC = () => {
   return (
     <article className="resume active" data-page="resume">
-      <header>
+      <header style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '30px' }}>
         <h2 className="h2 article-title">Resume</h2>
+        <a 
+          href="/assets/resume/Dhyey_Barbhaya_Resume.pdf" 
+          download="Dhyey_Barbhaya_Resume.pdf"
+          className="form-btn"
+          style={{ 
+            display: 'inline-flex', 
+            alignItems: 'center', 
+            gap: '8px',
+            padding: '10px 20px',
+            fontSize: '14px',
+            textDecoration: 'none',
+            pointerEvents: 'auto',
+            cursor: 'pointer',
+          }}
+        >
+          {/*@ts-ignore*/}
+          <ion-icon name="download-outline"></ion-icon>
+          <span>Download CV</span>
+        </a>
       </header>
 
       <section className="timeline">
