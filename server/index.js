@@ -83,17 +83,32 @@ app.post('/api/contact', async (req, res) => {
         to: email, // The dynamic email address they provided
         subject: `Thank you for contacting Dhyey Barbhaya!`,
         html: `
-          <h2>Hello ${fullname},</h2>
-          <p>Thank you for reaching out to me through my portfolio website!</p>
-          <p>I have received your message and will get back to you as soon as possible.</p>
-          <br />
-          <p><strong>Here is a copy of what you sent:</strong></p>
-          <blockquote style="border-left: 4px solid #fdbf5c; padding-left: 10px; color: #555;">
-            ${message}
-          </blockquote>
-          <br />
-          <p>Best Regards,</p>
-          <p><strong>Dhyey Barbhaya</strong></p>
+          <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 600px; margin: 0 auto; padding: 30px; background-color: #1e1e1f; color: #d6d6d6; border-radius: 12px; border: 1px solid #383838; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);">
+            <div style="text-align: center; border-bottom: 2px solid #fdbf5c; padding-bottom: 20px; margin-bottom: 25px;">
+              <h1 style="color: #ffffff; margin: 0; font-size: 26px; font-weight: 600;">Message Received <span style="color: #fdbf5c;">✓</span></h1>
+            </div>
+            
+            <p style="font-size: 16px; color: #ffffff;">Hello <strong>${fullname}</strong>,</p>
+            
+            <p style="font-size: 15px; line-height: 1.6;">
+              Thank you for reaching out through my portfolio website! I have successfully received your message and truly appreciate your interest.
+            </p>
+            
+            <p style="font-size: 15px; line-height: 1.6;">
+              I will review your inquiry and get back to you as soon as possible.
+            </p>
+            
+            <div style="background-color: #282829; padding: 20px; border-left: 4px solid #fdbf5c; border-radius: 6px; margin: 30px 0;">
+              <p style="margin: 0; font-size: 13px; color: #aaaaaa; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px;">Copy of your message:</p>
+              <p style="margin: 0; font-size: 15px; color: #ffffff; font-style: italic; white-space: pre-wrap;">"${message}"</p>
+            </div>
+            
+            <div style="margin-top: 35px; padding-top: 25px; border-top: 1px solid #383838;">
+              <p style="margin: 0; font-size: 15px; color: #aaaaaa;">Best Regards,</p>
+              <p style="margin: 8px 0 0 0; font-size: 20px; color: #fdbf5c; font-weight: bold; letter-spacing: 0.5px;">Dhyey Barbhaya</p>
+              <a href="https://github.com/DHYEY2703" style="display: inline-block; margin-top: 12px; color: #fdbf5c; text-decoration: none; font-size: 14px; border: 1px solid #fdbf5c; padding: 6px 12px; border-radius: 4px;">View My Work</a>
+            </div>
+          </div>
         `,
       };
 
