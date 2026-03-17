@@ -1,0 +1,62 @@
+class SoundManager {
+  private audioCtx: AudioContext | null = null;
+  private initialized = false;
+
+  init() {
+    if (this.initialized) return;
+    try {
+      // @ts-expect-error: vendor prefix fallback for older browsers
+      const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+      this.audioCtx = new AudioContextClass();
+      this.initialized = true;
+    } catch (e) {
+      console.error('Web Audio API not supported', e);
+    }
+  }
+
+  playHover() {
+    if (!this.initialized || !this.audioCtx) return;
+    if (this.audioCtx.state === 'suspended') this.audioCtx.resume();
+
+    const osc = this.audioCtx.createOscillator();
+    const gainNode = this.audioCtx.createGain();
+
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(800, this.audioCtx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(1200, this.audioCtx.currentTime + 0.05);
+
+    gainNode.gain.setValueAtTime(0, this.audioCtx.currentTime);
+    gainNode.gain.linearRampToValueAtTime(0.015, this.audioCtx.currentTime + 0.01);
+    gainNode.gain.exponentialRampToValueAtTime(0.001, this.audioCtx.currentTime + 0.05);
+
+    osc.connect(gainNode);
+    gainNode.connect(this.audioCtx.destination);
+
+    osc.start();
+    osc.stop(this.audioCtx.currentTime + 0.05);
+  }
+
+  playClick() {
+    if (!this.initialized || !this.audioCtx) return;
+    if (this.audioCtx.state === 'suspended') this.audioCtx.resume();
+
+    const osc = this.audioCtx.createOscillator();
+    const gainNode = this.audioCtx.createGain();
+
+    osc.type = 'triangle';
+    osc.frequency.setValueAtTime(300, this.audioCtx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(100, this.audioCtx.currentTime + 0.1);
+
+    gainNode.gain.setValueAtTime(0, this.audioCtx.currentTime);
+    gainNode.gain.linearRampToValueAtTime(0.05, this.audioCtx.currentTime + 0.02);
+    gainNode.gain.exponentialRampToValueAtTime(0.001, this.audioCtx.currentTime + 0.1);
+
+    osc.connect(gainNode);
+    gainNode.connect(this.audioCtx.destination);
+
+    osc.start();
+    osc.stop(this.audioCtx.currentTime + 0.1);
+  }
+}
+
+export const soundManager = new SoundManager();
