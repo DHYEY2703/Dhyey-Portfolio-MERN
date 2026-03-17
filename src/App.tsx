@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Sidebar from './components/Sidebar';
 import Navbar from './components/Navbar';
 import About from './pages/About';
@@ -6,7 +6,8 @@ import Resume from './pages/Resume';
 import Portfolio from './pages/Portfolio';
 import Blog from './pages/Blog';
 import Contact from './pages/Contact';
-import Admin from './pages/Admin';
+import Admin from './pages/Admin'; // Trigger TS server re-check
+
 import Background3D from './components/Background3D';
 import { Toaster } from 'react-hot-toast';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -14,11 +15,35 @@ import CustomCursor from './components/CustomCursor';
 import FloatingContact from './components/FloatingContact';
 import Loader from './components/Loader';
 import { soundManager } from './utils/SoundManager';
+import ChatbotWidget from './components/ChatbotWidget';
+import confetti from 'canvas-confetti';
 
 function App() {
   const [showSplash, setShowSplash] = useState(true);
   const [activePage, setActivePage] = useState('about');
   const [theme, setTheme] = useState('dark');
+  const keysRef = useRef('');
+
+  // Track Unique Visitor Session
+  useEffect(() => {
+    const trackVisitor = async () => {
+      // Prevent tracking if we already logged them this session
+      if (sessionStorage.getItem('visited')) return;
+      try {
+        const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+        await fetch(`${API_URL}/api/visitors`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ userAgent: navigator.userAgent })
+        });
+        sessionStorage.setItem('visited', 'true');
+      } catch (err) {
+        console.error('Failed to log visit', err);
+      }
+    };
+    // Add small delay to let splash screen load first
+    setTimeout(trackVisitor, 2000); 
+  }, []);
 
   // Listen to hash changes for Admin panel
   const [isAdmin, setIsAdmin] = useState(window.location.hash === '#admin');
@@ -26,6 +51,40 @@ function App() {
   useEffect(() => {
     const handleHashChange = () => setIsAdmin(window.location.hash === '#admin');
     window.addEventListener('hashchange', handleHashChange);
+
+    // Auto-start ambient music on first user interaction anywhere on the document
+    const startAmbientMusic = () => {
+      soundManager.init();
+      soundManager.playAmbientMusic();
+      // Remove listeners once it's started
+      window.removeEventListener('click', startAmbientMusic);
+      window.removeEventListener('keydown', startAmbientMusic);
+      window.removeEventListener('touchstart', startAmbientMusic);
+      window.removeEventListener('mousemove', startAmbientMusic);
+    };
+
+    // Easter Egg Konami Code ('dhyey')
+    const handleKonami = (e: KeyboardEvent) => {
+      keysRef.current += e.key.toLowerCase();
+      if (keysRef.current.length > 10) keysRef.current = keysRef.current.slice(-10);
+      
+      if (keysRef.current.includes('dhyey')) {
+        soundManager.playClick();
+        confetti({
+          particleCount: 200,
+          spread: 100,
+          origin: { y: 0.5 },
+          colors: ['#fdbf5c', '#00ff88', '#ff0055', '#61dafb']
+        });
+        keysRef.current = '';
+      }
+    };
+    window.addEventListener('keydown', handleKonami);
+
+    window.addEventListener('click', startAmbientMusic, { once: true });
+    window.addEventListener('keydown', startAmbientMusic, { once: true });
+    window.addEventListener('touchstart', startAmbientMusic, { once: true });
+    window.addEventListener('mousemove', startAmbientMusic, { once: true });
 
     // Global sound effects listener
     const handleMouseOver = (e: MouseEvent) => {
@@ -60,6 +119,11 @@ function App() {
       window.removeEventListener('hashchange', handleHashChange);
       window.removeEventListener('mouseover', handleMouseOver);
       window.removeEventListener('click', handleClick);
+      window.removeEventListener('keydown', handleKonami);
+      window.removeEventListener('click', startAmbientMusic);
+      window.removeEventListener('keydown', startAmbientMusic);
+      window.removeEventListener('touchstart', startAmbientMusic);
+      window.removeEventListener('mousemove', startAmbientMusic);
     };
   }, [showSplash]);
 
@@ -84,6 +148,7 @@ function App() {
       <CustomCursor />
       <Toaster position="top-right" />
       <FloatingContact />
+      <ChatbotWidget />
       <AnimatePresence>
         {showSplash && <Loader onComplete={handleEnterExperience} />}
       </AnimatePresence>

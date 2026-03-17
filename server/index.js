@@ -2,14 +2,32 @@ const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
 const nodemailer = require('nodemailer');
+const http = require('http');
+const { Server } = require('socket.io');
 require('dotenv').config();
 
 const app = express();
+const server = http.createServer(app);
+const io = new Server(server, {
+  cors: {
+    origin: '*',
+    methods: ['GET', 'POST']
+  }
+});
+
 const PORT = process.env.PORT || 5000;
 
 // Middleware
 app.use(cors());
 app.use(express.json());
+
+// Track connected socket clients
+io.on('connection', (socket) => {
+  console.log('⚡ Admin connected to Live WebSocket:', socket.id);
+  socket.on('disconnect', () => {
+    console.log('❌ Admin disconnected from WebSocket:', socket.id);
+  });
+});
 
 // MongoDB Connection
 const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/portfolio';
@@ -52,6 +70,14 @@ app.post('/api/contact', async (req, res) => {
     const newMessage = new Message({ fullname, email, message });
     await newMessage.save();
 
+    // Fire WebSocket Event to Connected Admins
+    io.emit('new_message', { 
+      fullname, 
+      email, 
+      message, 
+      createdAt: newMessage.createdAt 
+    });
+
     // Send Email Notifications
     if (process.env.EMAIL_USER && process.env.EMAIL_PASS) {
       const transporter = nodemailer.createTransport({
@@ -66,14 +92,37 @@ app.post('/api/contact', async (req, res) => {
       const mailOptionsToOwner = {
         from: process.env.EMAIL_USER,
         to: 'dhyeybarbhaya@gmail.com',
-        subject: `Portfolio Contact - ${fullname}`,
+        subject: `New Lead: ${fullname} via Portfolio`,
         html: `
-          <h2>New Contact Form Submission</h2>
-          <p><strong>Name:</strong> ${fullname}</p>
-          <p><strong>Email:</strong> ${email}</p>
-          <p><strong>Message:</strong> ${message}</p>
-          <hr />
-          <p><em>Sent from your portfolio website</em></p>
+          <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 600px; margin: 0 auto; padding: 30px; background-color: #1a1a1a; color: #f0f0f0; border-radius: 12px; border: 1px solid #333; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);">
+            <div style="text-align: center; border-bottom: 2px solid #00ff88; padding-bottom: 20px; margin-bottom: 25px;">
+              <h1 style="color: #ffffff; margin: 0; font-size: 24px;">New Contact Submission <span style="color: #00ff88;">🚀</span></h1>
+            </div>
+            
+            <p style="font-size: 16px; color: #d6d6d6;">You have received a new message from a visitor on your portfolio website!</p>
+            
+            <table style="width: 100%; border-collapse: collapse; margin: 20px 0;">
+              <tr>
+                <td style="padding: 12px; border-bottom: 1px solid #333; color: #00ff88; font-weight: bold; width: 100px;">Name:</td>
+                <td style="padding: 12px; border-bottom: 1px solid #333; color: #ffffff;">${fullname}</td>
+              </tr>
+              <tr>
+                <td style="padding: 12px; border-bottom: 1px solid #333; color: #00ff88; font-weight: bold;">Email:</td>
+                <td style="padding: 12px; border-bottom: 1px solid #333;">
+                  <a href="mailto:${email}" style="color: #fdbf5c; text-decoration: none;">${email}</a>
+                </td>
+              </tr>
+            </table>
+
+            <div style="background-color: #242424; padding: 20px; border-left: 4px solid #00ff88; border-radius: 6px; margin: 20px 0;">
+              <p style="margin: 0; font-size: 13px; color: #aaaaaa; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px;">Message:</p>
+              <p style="margin: 0; font-size: 16px; color: #ffffff; white-space: pre-wrap; line-height: 1.5;">"${message}"</p>
+            </div>
+            
+            <div style="margin-top: 30px; text-align: center;">
+              <a href="mailto:${email}" style="display: inline-block; background-color: #00ff88; color: #1a1a1a; text-decoration: none; font-weight: bold; padding: 12px 24px; border-radius: 6px; font-size: 15px;">Reply to ${fullname}</a>
+            </div>
+          </div>
         `,
       };
 
@@ -126,8 +175,101 @@ app.post('/api/contact', async (req, res) => {
   }
 });
 
-// GET - All Messages (for admin)
-app.get('/api/messages', async (req, res) => {
+// ============================================================
+// Secure Admin Authentication & JWT
+// ============================================================
+const jwt = require('jsonwebtoken');
+const JWT_SECRET = process.env.JWT_SECRET || 'supersecret123';
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'dhyey@admin123';
+
+app.post('/api/admin/login', (req, res) => {
+  const { password } = req.body;
+  if (password === ADMIN_PASSWORD) {
+    const token = jwt.sign({ role: 'admin' }, JWT_SECRET, { expiresIn: '1d' });
+    res.json({ success: true, token });
+  } else {
+    res.status(401).json({ error: 'Invalid admin credentials' });
+  }
+});
+
+// Middleware to verify JWT token
+const verifyAdmin = (req, res, next) => {
+  const token = req.headers.authorization?.split(' ')[1];
+  if (!token) return res.status(401).json({ error: 'Access denied. No token provided.' });
+  try {
+    const decoded = jwt.verify(token, JWT_SECRET);
+    if (decoded.role !== 'admin') throw new Error();
+    next();
+  } catch (error) {
+    res.status(401).json({ error: 'Invalid token' });
+  }
+};
+
+
+// ============================================================
+// Live Visitor Tracking Schema
+// ============================================================
+const visitorSchema = new mongoose.Schema({
+  userAgent: String,
+  date: { type: Date, default: Date.now }
+});
+const Visitor = mongoose.model('Visitor', visitorSchema);
+
+// POST - Log a new visit
+app.post('/api/visitors', async (req, res) => {
+  try {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // Start of today
+
+    // Simple anti-spam: Only log one visit per IP/UserAgent per day (in a real app, use session or IP hash)
+    // For portfolio purposes, we'll log it if the user agent is provided and not empty
+    if(req.body.userAgent) {
+       await new Visitor({ userAgent: req.body.userAgent }).save();
+    }
+    
+    res.status(200).json({ success: true });
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to log visitor' });
+  }
+});
+
+// GET - Visitor Analytics Data (Last 7 Days) for Recharts -> Protected
+app.get('/api/visitors/analytics', verifyAdmin, async (req, res) => {
+  try {
+    const sevenDaysAgo = new Date();
+    sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 6);
+    sevenDaysAgo.setHours(0, 0, 0, 0);
+
+    const visitors = await Visitor.find({
+      date: { $gte: sevenDaysAgo }
+    });
+
+    // Aggregate by day of week
+    const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    const analytics = [];
+    
+    // Initialize last 7 days with 0
+    for(let i=6; i>=0; i--) {
+      const d = new Date();
+      d.setDate(d.getDate() - i);
+      analytics.push({ name: days[d.getDay()], dateString: d.toDateString(), visitors: 0 });
+    }
+
+    visitors.forEach(v => {
+      const vDate = new Date(v.date).toDateString();
+      const match = analytics.find(a => a.dateString === vDate);
+      if(match) match.visitors++;
+    });
+
+    res.json(analytics);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch analytics' });
+  }
+});
+
+
+// GET - All Messages (for admin) -> Protected
+app.get('/api/messages', verifyAdmin, async (req, res) => {
   try {
     const messages = await Message.find().sort({ createdAt: -1 });
     res.json(messages);
@@ -137,8 +279,56 @@ app.get('/api/messages', async (req, res) => {
 });
 
 // ============================================================
+// Blog Post Schema & Model
+// ============================================================
+const blogSchema = new mongoose.Schema({
+  title: { type: String, required: true },
+  category: { type: String, required: true },
+  text: { type: String, required: true },
+  img: { type: String, required: true },
+  createdAt: { type: Date, default: Date.now }
+});
+
+const Blog = mongoose.model('Blog', blogSchema);
+
+// GET - All Blogs
+app.get('/api/blogs', async (req, res) => {
+  try {
+    const blogs = await Blog.find().sort({ createdAt: -1 });
+    res.json(blogs);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch blogs' });
+  }
+});
+
+// POST - Add new Blog (for admin CMS) -> Protected
+app.post('/api/blogs', verifyAdmin, async (req, res) => {
+  try {
+    const { title, category, text, img } = req.body;
+    if (!title || !category || !text || !img) {
+      return res.status(400).json({ error: 'All blog fields are required' });
+    }
+    const newBlog = new Blog({ title, category, text, img });
+    await newBlog.save();
+    res.status(201).json({ success: true, message: 'Blog created successfully!' });
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to create blog' });
+  }
+});
+
+// DELETE - Delete Blog (for admin CMS) -> Protected
+app.delete('/api/blogs/:id', verifyAdmin, async (req, res) => {
+  try {
+    await Blog.findByIdAndDelete(req.params.id);
+    res.json({ success: true, message: 'Blog deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to delete blog' });
+  }
+});
+
+// ============================================================
 // START SERVER
 // ============================================================
-app.listen(PORT, () => {
-  console.log(`🚀 Server running on http://localhost:${PORT}`);
+server.listen(PORT, () => {
+  console.log(`🚀 Server with WebSockets running on http://localhost:${PORT}`);
 });

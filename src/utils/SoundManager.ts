@@ -2,7 +2,6 @@ class SoundManager {
   private audioCtx: AudioContext | null = null;
   private initialized = false;
   private backgroundMusic: HTMLAudioElement | null = null;
-  private hoverTimeout: ReturnType<typeof setTimeout> | null = null;
 
   init() {
     if (this.initialized) return;
@@ -40,21 +39,17 @@ class SoundManager {
 
     osc.start();
     osc.stop(this.audioCtx.currentTime + 0.05);
+  }
 
-    // Play background music ONLY while hovering
+  playAmbientMusic() {
     if (this.backgroundMusic) {
-      this.backgroundMusic.play().catch(e => console.log('Audio play failed', e));
-      
-      // Clear any existing timeout to stop the music
-      if (this.hoverTimeout) clearTimeout(this.hoverTimeout);
-      
-      // Stop the music slightly after hover ends (assuming continuous hover calls keep this alive, 
-      // but if hover ends, it stops after 300ms)
-      this.hoverTimeout = setTimeout(() => {
-        if (this.backgroundMusic) {
-          this.backgroundMusic.pause();
-        }
-      }, 500); 
+      this.backgroundMusic.play().catch(e => console.error('Ambient music play failed', e));
+    }
+  }
+
+  stopAmbientMusic() {
+    if (this.backgroundMusic) {
+      this.backgroundMusic.pause();
     }
   }
 
@@ -76,6 +71,8 @@ class SoundManager {
     osc.connect(gainNode);
     gainNode.connect(this.audioCtx.destination);
 
+    osc.start();
+    osc.stop(this.audioCtx.currentTime + 0.1);
   }
 }
 

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import TechStack3D from '../components/TechStack3D';
+import { GitHubCalendar } from 'react-github-calendar';
 
 const About: React.FC = () => {
   const [modalData, setModalData] = useState<{name: string, text: string, date: string, avatar: string} | null>(null);
@@ -96,6 +97,21 @@ const About: React.FC = () => {
             </div>
           </li>
         </ul>
+      </section>
+
+      <section className="github-calendar" style={{ marginBottom: '30px' }}>
+        <h3 className="h3 service-title">My GitHub Activity</h3>
+        <div className="content-card" style={{ padding: '20px', display: 'flex', justifyContent: 'center', overflowX: 'auto' }}>
+          <GitHubCalendar 
+            username="DHYEY2703" 
+            colorScheme="dark"
+            theme={{
+              light: ['#ebedf0', '#9be9a8', '#40c463', '#30a14e', '#216e39'],
+              dark: ['#1e1e1f', '#00441b', '#006d2c', '#2ca25f', '#00ff88']
+            }}
+            style={{ width: '100%' }}
+          />
+        </div>
       </section>
 
       <section className="testimonials">

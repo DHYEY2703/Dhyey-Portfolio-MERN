@@ -101,6 +101,7 @@ const Resume: React.FC = () => {
 
       <section className="skill">
         <h3 className="h3 skills-title">Technical Skills</h3>
+        
         <div className="content-card" style={{ height: '400px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
           <ResponsiveContainer width="100%" height="100%">
             <RadarChart cx="50%" cy="50%" outerRadius="70%" data={skillsData}>
