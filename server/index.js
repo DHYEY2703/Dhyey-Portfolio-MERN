@@ -52,7 +52,7 @@ app.post('/api/contact', async (req, res) => {
     const newMessage = new Message({ fullname, email, message });
     await newMessage.save();
 
-    // Send Email Notification (optional - configure .env)
+    // Send Email Notifications
     if (process.env.EMAIL_USER && process.env.EMAIL_PASS) {
       const transporter = nodemailer.createTransport({
         service: 'gmail',
@@ -62,7 +62,8 @@ app.post('/api/contact', async (req, res) => {
         },
       });
 
-      const mailOptions = {
+      // 1. Alert to YOU (The Portfolio Owner)
+      const mailOptionsToOwner = {
         from: process.env.EMAIL_USER,
         to: 'dhyeybarbhaya@gmail.com',
         subject: `Portfolio Contact - ${fullname}`,
@@ -76,7 +77,32 @@ app.post('/api/contact', async (req, res) => {
         `,
       };
 
-      await transporter.sendMail(mailOptions);
+      // 2. Auto-reply to the SENDER (The Person Contacting You)
+      const mailOptionsToSender = {
+        from: process.env.EMAIL_USER,
+        to: email, // The dynamic email address they provided
+        subject: `Thank you for contacting Dhyey Barbhaya!`,
+        html: `
+          <h2>Hello ${fullname},</h2>
+          <p>Thank you for reaching out to me through my portfolio website!</p>
+          <p>I have received your message and will get back to you as soon as possible.</p>
+          <br />
+          <p><strong>Here is a copy of what you sent:</strong></p>
+          <blockquote style="border-left: 4px solid #fdbf5c; padding-left: 10px; color: #555;">
+            ${message}
+          </blockquote>
+          <br />
+          <p>Best Regards,</p>
+          <p><strong>Dhyey Barbhaya</strong></p>
+          <p>Full Stack Developer</p>
+        `,
+      };
+
+      // Send both emails simultaneously
+      await Promise.all([
+        transporter.sendMail(mailOptionsToOwner),
+        transporter.sendMail(mailOptionsToSender)
+      ]);
     }
 
     res.status(201).json({ success: true, message: 'Message sent successfully!' });
