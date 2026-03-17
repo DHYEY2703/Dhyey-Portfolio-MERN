@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Sidebar from './components/Sidebar';
 import Navbar from './components/Navbar';
 import About from './pages/About';
@@ -16,15 +16,15 @@ function App() {
   const [theme, setTheme] = useState('dark');
 
   // Listen to hash changes for Admin panel
-  const [isAdmin, setIsAdmin] = React.useState(window.location.hash === '#admin');
+  const [isAdmin, setIsAdmin] = useState(window.location.hash === '#admin');
 
-  React.useEffect(() => {
+  useEffect(() => {
     const handleHashChange = () => setIsAdmin(window.location.hash === '#admin');
     window.addEventListener('hashchange', handleHashChange);
     return () => window.removeEventListener('hashchange', handleHashChange);
   }, []);
 
-  React.useEffect(() => {
+  useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
   }, [theme]);
 
