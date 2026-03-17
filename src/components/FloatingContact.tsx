@@ -60,19 +60,23 @@ const FloatingContact: React.FC = () => {
         onClick={() => setIsOpen(!isOpen)}
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.9 }}
+        animate={{
+          boxShadow: ['0 16px 30px hsla(0, 0%, 0%, 0.05)', '0 0 25px hsla(45, 100%, 72%, 0.5)', '0 16px 30px hsla(0, 0%, 0%, 0.05)']
+        }}
+        transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut' }}
         style={{
           width: '60px',
           height: '60px',
           borderRadius: '50%',
           background: 'var(--bg-gradient-yellow-1)',
           border: 'none',
-          boxShadow: 'var(--shadow-2)',
           color: 'var(--smoky-black)',
           fontSize: '24px',
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',
-          cursor: 'pointer'
+          cursor: 'pointer',
+          zIndex: 100
         }}
       >
         <motion.div

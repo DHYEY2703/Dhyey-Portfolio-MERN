@@ -34,41 +34,63 @@ const CustomCursor: React.FC = () => {
     };
   }, []);
 
-  const variants = {
+  const mainVariants = {
     default: {
-      x: mousePosition.x - 12,
-      y: mousePosition.y - 12,
+      x: mousePosition.x - 10,
+      y: mousePosition.y - 10,
       scale: 1,
-      backgroundColor: 'var(--orange-yellow-crayola)',
-      border: 'none'
+      backgroundColor: 'var(--orange-yellow-crayola)'
     },
     hover: {
-      x: mousePosition.x - 12,
-      y: mousePosition.y - 12,
-      scale: 1.5,
-      backgroundColor: 'var(--orange-yellow-crayola)',
-      border: 'none'
+      x: mousePosition.x - 10,
+      y: mousePosition.y - 10,
+      scale: 1.8,
+      backgroundColor: 'var(--white-2)'
     }
   };
 
   return (
-    <motion.div
-      variants={variants}
-      animate={isHovering ? "hover" : "default"}
-      transition={{ type: 'spring', stiffness: 500, damping: 28, mass: 0.5 }}
-      style={{
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        width: '24px',
-        height: '24px',
-        borderRadius: '50%',
-        pointerEvents: 'none',
-        zIndex: 9999,
-        mixBlendMode: 'difference'
-      }}
-    >
-    </motion.div>
+    <>
+      {/* Trailing Glowing Orb */}
+      <motion.div
+        animate={{
+          x: mousePosition.x - 40,
+          y: mousePosition.y - 40,
+        }}
+        transition={{ type: 'spring', stiffness: 100, damping: 20, mass: 0.8 }}
+        style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          width: '80px',
+          height: '80px',
+          borderRadius: '50%',
+          background: 'linear-gradient(135deg, var(--orange-yellow-crayola) 0%, hsla(35, 100%, 68%, 0.5) 100%)',
+          filter: 'blur(25px)',
+          opacity: 0.6,
+          pointerEvents: 'none',
+          zIndex: 9998,
+        }}
+      />
+      
+      {/* Solid Main Ball */}
+      <motion.div
+        variants={mainVariants}
+        animate={isHovering ? "hover" : "default"}
+        transition={{ type: 'spring', stiffness: 500, damping: 28, mass: 0.5 }}
+        style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          width: '20px',
+          height: '20px',
+          borderRadius: '50%',
+          pointerEvents: 'none',
+          zIndex: 9999,
+          mixBlendMode: 'difference'
+        }}
+      />
+    </>
   );
 };
 
