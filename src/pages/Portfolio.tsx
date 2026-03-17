@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const Portfolio: React.FC = () => {
   const [filter, setFilter] = useState('All');
   const [selectActive, setSelectActive] = useState(false);
+  const [selectedProject, setSelectedProject] = useState<{ title: string; category: string; img: string; link: string } | null>(null);
 
   const projects = [
     { 
@@ -76,7 +78,7 @@ const Portfolio: React.FC = () => {
           <button className={`filter-select ${selectActive ? 'active' : ''}`} onClick={() => setSelectActive(!selectActive)}>
             <div className="select-value">{filter === 'All' ? 'Select category' : filter}</div>
             <div className="select-icon">
-              {/*@ts-ignore*/}
+                    {/*@ts-expect-error: ion-icon custom component*/}
               <ion-icon name="chevron-down"></ion-icon>
             </div>
           </button>
@@ -101,23 +103,119 @@ const Portfolio: React.FC = () => {
         </div>
 
         <ul className="project-list">
-          {filteredProjects.map((project, index) => (
-            <li className="project-item active" key={index}>
-              <a href={project.link} target="_blank" rel="noopener noreferrer">
-                <figure className="project-img">
-                  <div className="project-item-icon-box">
-                    {/*@ts-ignore*/}
-                    <ion-icon name="eye-outline"></ion-icon>
-                  </div>
-                  <img src={project.img} alt={project.title} loading="lazy" />
-                </figure>
-                <h3 className="project-title">{project.title}</h3>
-                <p className="project-category">{project.category}</p>
-              </a>
-            </li>
-          ))}
+          <AnimatePresence>
+            {filteredProjects.map((project, index) => (
+              <motion.li 
+                layout
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.9 }}
+                transition={{ duration: 0.3 }}
+                className="project-item active" 
+                key={index}
+                onClick={() => setSelectedProject(project)}
+                style={{ cursor: 'pointer' }}
+              >
+                <div>
+                  <figure className="project-img">
+                    <div className="project-item-icon-box">
+                      {/*@ts-expect-error: ion-icon custom component*/}
+                      <ion-icon name="eye-outline"></ion-icon>
+                    </div>
+                    <img src={project.img} alt={project.title} loading="lazy" />
+                  </figure>
+                  <h3 className="project-title">{project.title}</h3>
+                  <p className="project-category">{project.category}</p>
+                </div>
+              </motion.li>
+            ))}
+          </AnimatePresence>
         </ul>
       </section>
+
+      {/* Dynamic Slide-Out Modal */}
+      <AnimatePresence>
+        {selectedProject && (
+          <div className="modal-container active" style={{ zIndex: 1000, pointerEvents: 'all' }}>
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 0.8 }}
+              exit={{ opacity: 0 }}
+              className="overlay active" 
+              onClick={() => setSelectedProject(null)} 
+            ></motion.div>
+            
+            <motion.section 
+              initial={{ x: '100%', opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              exit={{ x: '100%', opacity: 0 }}
+              transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+              style={{
+                position: 'fixed',
+                top: 0,
+                right: 0,
+                width: '100%',
+                maxWidth: '500px',
+                height: '100vh',
+                background: 'var(--eerie-black-2)',
+                borderLeft: '1px solid var(--jet)',
+                padding: '30px',
+                zIndex: 1001,
+                overflowY: 'auto',
+                boxShadow: 'var(--shadow-5)'
+              }}
+            >
+              <button 
+                onClick={() => setSelectedProject(null)}
+                style={{
+                  position: 'absolute',
+                  top: '20px',
+                  right: '20px',
+                  background: 'var(--onyx)',
+                  width: '40px',
+                  height: '40px',
+                  borderRadius: '10px',
+                  color: 'var(--orange-yellow-crayola)',
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  cursor: 'pointer'
+                }}
+              >
+                {/*@ts-expect-error: ion-icon custom component*/}
+                <ion-icon name="close-outline" style={{ fontSize: '24px' }}></ion-icon>
+              </button>
+
+              <div style={{ marginTop: '40px' }}>
+                <figure style={{ borderRadius: '16px', overflow: 'hidden', marginBottom: '20px', boxShadow: 'var(--shadow-2)' }}>
+                  <img src={selectedProject.img} alt={selectedProject.title} style={{ width: '100%', height: 'auto', objectFit: 'cover' }} />
+                </figure>
+                
+                <h3 className="h2" style={{ color: 'var(--white-2)', marginBottom: '5px' }}>{selectedProject.title}</h3>
+                <p style={{ color: 'var(--orange-yellow-crayola)', fontSize: '14px', marginBottom: '20px' }}>{selectedProject.category}</p>
+                
+                <p style={{ color: 'var(--light-gray)', lineHeight: '1.6', marginBottom: '30px' }}>
+                  This is a detailed overview of {selectedProject.title}. Built with modern technologies and focused on clean architecture, this project demonstrates full-stack capabilities, scalable design, and intuitive user experiences.
+                </p>
+
+                <div style={{ display: 'flex', gap: '15px' }}>
+                  <a 
+                    href={selectedProject.link} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="form-btn"
+                    style={{ flex: 1, textDecoration: 'none' }}
+                  >
+                    {/*@ts-expect-error: ion-icon custom component*/}
+                    <ion-icon name="logo-github"></ion-icon>
+                    <span>View Repository</span>
+                  </a>
+                </div>
+              </div>
+            </motion.section>
+          </div>
+        )}
+      </AnimatePresence>
     </article>
   );
 };

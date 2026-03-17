@@ -10,6 +10,8 @@ import Admin from './pages/Admin';
 import Background3D from './components/Background3D';
 import { Toaster } from 'react-hot-toast';
 import { AnimatePresence, motion } from 'framer-motion';
+import CustomCursor from './components/CustomCursor';
+import FloatingContact from './components/FloatingContact';
 
 function App() {
   const [activePage, setActivePage] = useState('about');
@@ -36,7 +38,9 @@ function App() {
 
   return (
     <>
+      <CustomCursor />
       <Toaster position="top-right" />
+      <FloatingContact />
       <Background3D theme={theme} />
       <main>
         <Sidebar toggleTheme={toggleTheme} theme={theme} />
