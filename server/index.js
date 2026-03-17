@@ -94,7 +94,6 @@ app.post('/api/contact', async (req, res) => {
           <br />
           <p>Best Regards,</p>
           <p><strong>Dhyey Barbhaya</strong></p>
-          <p>Full Stack Developer</p>
         `,
       };
 
