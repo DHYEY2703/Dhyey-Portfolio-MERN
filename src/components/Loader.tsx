@@ -58,7 +58,7 @@ const Loader: React.FC<LoaderProps> = ({ onComplete }) => {
         overflow: 'hidden'
       }}
     >
-      {/* Massive Background Text Matching Photo */}
+      {/* Massive Background Text Matching Photo layout but with Portfolio Color */}
       <motion.div
         initial={{ scale: 0.9, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
@@ -71,8 +71,8 @@ const Loader: React.FC<LoaderProps> = ({ onComplete }) => {
           whiteSpace: 'nowrap',
           fontSize: '40vw',
           fontWeight: 900,
-          color: '#00FFFF', // Exact cyan color requested from the photo
-          opacity: 1, // Completely solid, exactly like the photo
+          color: 'var(--orange-yellow-crayola)', // Matching the portfolio's golden yellow theme
+          opacity: 1, // Completely solid, exactly like the photo style
           zIndex: 1,
           fontFamily: '"Arial Black", Impact, sans-serif',
           letterSpacing: '-0.06em',
