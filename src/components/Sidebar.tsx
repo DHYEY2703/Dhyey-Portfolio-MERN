@@ -79,21 +79,27 @@ const Sidebar: React.FC = () => {
 
         <ul className="social-list">
           <li className="social-item">
-            <a href="#" className="social-link">
+            <a href="https://www.facebook.com/" target="_blank" rel="noopener noreferrer" className="social-link">
               {/*@ts-ignore*/}
               <ion-icon name="logo-facebook"></ion-icon>
             </a>
           </li>
           <li className="social-item">
-            <a href="#" className="social-link">
+            <a href="https://twitter.com/" target="_blank" rel="noopener noreferrer" className="social-link">
               {/*@ts-ignore*/}
               <ion-icon name="logo-twitter"></ion-icon>
             </a>
           </li>
           <li className="social-item">
-            <a href="#" className="social-link">
+            <a href="https://www.instagram.com/oyyy.dhyeylaa/" target="_blank" rel="noopener noreferrer" className="social-link">
               {/*@ts-ignore*/}
               <ion-icon name="logo-instagram"></ion-icon>
+            </a>
+          </li>
+          <li className="social-item">
+            <a href="https://github.com/DHYEY2703" target="_blank" rel="noopener noreferrer" className="social-link">
+              {/*@ts-ignore*/}
+              <ion-icon name="logo-github"></ion-icon>
             </a>
           </li>
         </ul>
