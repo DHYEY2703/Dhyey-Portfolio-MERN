@@ -39,13 +39,28 @@ const CustomCursor: React.FC = () => {
       x: mousePosition.x - 10,
       y: mousePosition.y - 10,
       scale: 1,
-      backgroundColor: 'var(--orange-yellow-crayola)'
+      backgroundColor: 'var(--orange-yellow-crayola)',
+      opacity: 1
     },
     hover: {
       x: mousePosition.x - 10,
       y: mousePosition.y - 10,
-      scale: 1.8,
-      backgroundColor: 'var(--white-2)'
+      scale: 3.5,
+      backgroundColor: 'var(--orange-yellow-crayola)',
+      opacity: 0.5
+    }
+  };
+
+  const orbVariants = {
+    default: {
+      x: mousePosition.x - 40,
+      y: mousePosition.y - 40,
+      scale: 1
+    },
+    hover: {
+      x: mousePosition.x - 40,
+      y: mousePosition.y - 40,
+      scale: 1.5
     }
   };
 
@@ -53,10 +68,8 @@ const CustomCursor: React.FC = () => {
     <>
       {/* Trailing Glowing Orb */}
       <motion.div
-        animate={{
-          x: mousePosition.x - 40,
-          y: mousePosition.y - 40,
-        }}
+        variants={orbVariants}
+        animate={isHovering ? "hover" : "default"}
         transition={{ type: 'spring', stiffness: 100, damping: 20, mass: 0.8 }}
         style={{
           position: 'fixed',
