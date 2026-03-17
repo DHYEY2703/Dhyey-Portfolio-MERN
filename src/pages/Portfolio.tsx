@@ -9,37 +9,37 @@ const Portfolio: React.FC = () => {
       title: 'RMS ERP System', 
       category: 'Full Stack', 
       img: '/assets/images/project-1.jpg',
-      link: 'https://github.com/DHYEY2703'
+      link: 'https://github.com/DHYEY2703/RMS-ERP'
     },
     { 
       title: 'AI Sales Forecaster', 
       category: 'AI Integration', 
       img: '/assets/images/project-2.png',
-      link: 'https://github.com/DHYEY2703'
+      link: 'https://github.com/DHYEY2703/AI-Sales-Forecaster'
     },
     { 
-      title: 'Attendance Management', 
+      title: 'Attendance Management System (AMS)', 
       category: 'Full Stack', 
       img: '/assets/images/project-3.jpg',
-      link: 'https://github.com/DHYEY2703'
+      link: 'https://github.com/DHYEY2703/AMS'
     },
     { 
       title: 'MERN 3D Portfolio', 
       category: 'Web Development', 
       img: '/assets/images/project-4.png',
-      link: 'https://github.com/DHYEY2703'
+      link: 'https://github.com/DHYEY2703/Dhyey-Portfolio-MERN'
     },
     { 
       title: 'E-commerce API', 
       category: 'Backend', 
       img: '/assets/images/project-5.png',
-      link: 'https://github.com/DHYEY2703'
+      link: 'https://github.com/DHYEY2703/Ecommerce-API'
     },
     { 
       title: 'Dynamic Dashboard', 
       category: 'Web Development', 
       img: '/assets/images/project-6.png',
-      link: 'https://github.com/DHYEY2703'
+      link: 'https://github.com/DHYEY2703/Dashboard'
     }
   ];
 
