@@ -39,10 +39,10 @@ const About: React.FC = () => {
 
       <section className="about-text">
         <p>
-          I'm Creative Director and UI/UX Designer from Sydney, Australia, working in web development and print media. I enjoy turning complex problems into simple, beautiful and intuitive designs.
+          Hi, I'm Dhyey Barbhaya, a passionate Full Stack Developer specializing in the MERN stack. I thrive on building scalable, performant web applications and intuitive interfaces that solve real-world problems. With a deep technical foundation in React, Node.js, Document Databases, and TypeScript, my focus is always on engineering clean, maintainable code to deliver outstanding digital experiences.
         </p>
         <p>
-          My job is to build your website so that it is functional and user-friendly but at the same time attractive. Moreover, I add personal touch to your product and make sure that is eye-catching and easy to use. My aim is to bring across your message and identity in the most creative way. I created web design for many famous brand companies.
+          Beyond traditional web development, I have a strong interest in integrating AI microservices for predictive analysis and crafting intelligent backend architectures. Whether I'm building a comprehensive ERP system, developing robust dynamic dashboards, or designing modern tech-forward interfaces, I bring a detail-oriented, solution-driven mindset to every project I tackle. Let's build something amazing together.
         </p>
       </section>
 
