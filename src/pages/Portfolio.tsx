@@ -5,15 +5,42 @@ const Portfolio: React.FC = () => {
   const [selectActive, setSelectActive] = useState(false);
 
   const projects = [
-    { title: 'Finance', category: 'Web development', img: '/assets/images/project-1.jpg' },
-    { title: 'Orizon', category: 'Web development', img: '/assets/images/project-2.png' },
-    { title: 'Fundo', category: 'Web design', img: '/assets/images/project-3.jpg' },
-    { title: 'Food Go', category: 'Applications', img: '/assets/images/project-4.png' },
-    { title: 'DSM.', category: 'Web design', img: '/assets/images/project-5.png' },
-    { title: 'MetaSpark', category: 'Web design', img: '/assets/images/project-6.png' },
-    { title: 'Summary', category: 'Web development', img: '/assets/images/project-7.png' },
-    { title: 'Krypto', category: 'Applications', img: '/assets/images/project-8.jpg' },
-    { title: 'Arrival', category: 'Web development', img: '/assets/images/project-9.png' },
+    { 
+      title: 'RMS ERP System', 
+      category: 'Full Stack', 
+      img: '/assets/images/project-1.jpg',
+      link: 'https://github.com/DHYEY2703'
+    },
+    { 
+      title: 'AI Sales Forecaster', 
+      category: 'AI Integration', 
+      img: '/assets/images/project-2.png',
+      link: 'https://github.com/DHYEY2703'
+    },
+    { 
+      title: 'Attendance Management', 
+      category: 'Full Stack', 
+      img: '/assets/images/project-3.jpg',
+      link: 'https://github.com/DHYEY2703'
+    },
+    { 
+      title: 'MERN 3D Portfolio', 
+      category: 'Web Development', 
+      img: '/assets/images/project-4.png',
+      link: 'https://github.com/DHYEY2703'
+    },
+    { 
+      title: 'E-commerce API', 
+      category: 'Backend', 
+      img: '/assets/images/project-5.png',
+      link: 'https://github.com/DHYEY2703'
+    },
+    { 
+      title: 'Dynamic Dashboard', 
+      category: 'Web Development', 
+      img: '/assets/images/project-6.png',
+      link: 'https://github.com/DHYEY2703'
+    }
   ];
 
   const filteredProjects = filter === 'All' 
@@ -32,13 +59,16 @@ const Portfolio: React.FC = () => {
             <button className={filter === 'All' ? 'active' : ''} onClick={() => setFilter('All')}>All</button>
           </li>
           <li className="filter-item">
-            <button className={filter === 'Web design' ? 'active' : ''} onClick={() => setFilter('Web design')}>Web design</button>
+            <button className={filter === 'Full Stack' ? 'active' : ''} onClick={() => setFilter('Full Stack')}>Full Stack</button>
           </li>
           <li className="filter-item">
-            <button className={filter === 'Applications' ? 'active' : ''} onClick={() => setFilter('Applications')}>Applications</button>
+            <button className={filter === 'Web Development' ? 'active' : ''} onClick={() => setFilter('Web Development')}>Web Development</button>
           </li>
           <li className="filter-item">
-            <button className={filter === 'Web development' ? 'active' : ''} onClick={() => setFilter('Web development')}>Web development</button>
+            <button className={filter === 'Backend' ? 'active' : ''} onClick={() => setFilter('Backend')}>Backend</button>
+          </li>
+          <li className="filter-item">
+            <button className={filter === 'AI Integration' ? 'active' : ''} onClick={() => setFilter('AI Integration')}>AI Integration</button>
           </li>
         </ul>
 
@@ -56,13 +86,16 @@ const Portfolio: React.FC = () => {
               <button onClick={() => { setFilter('All'); setSelectActive(false); }}>All</button>
             </li>
             <li className="select-item">
-              <button onClick={() => { setFilter('Web design'); setSelectActive(false); }}>Web design</button>
+              <button onClick={() => { setFilter('Full Stack'); setSelectActive(false); }}>Full Stack</button>
             </li>
             <li className="select-item">
-              <button onClick={() => { setFilter('Applications'); setSelectActive(false); }}>Applications</button>
+              <button onClick={() => { setFilter('Web Development'); setSelectActive(false); }}>Web Development</button>
             </li>
             <li className="select-item">
-              <button onClick={() => { setFilter('Web development'); setSelectActive(false); }}>Web development</button>
+              <button onClick={() => { setFilter('Backend'); setSelectActive(false); }}>Backend</button>
+            </li>
+            <li className="select-item">
+              <button onClick={() => { setFilter('AI Integration'); setSelectActive(false); }}>AI Integration</button>
             </li>
           </ul>
         </div>
@@ -70,7 +103,7 @@ const Portfolio: React.FC = () => {
         <ul className="project-list">
           {filteredProjects.map((project, index) => (
             <li className="project-item active" key={index}>
-              <a href="#">
+              <a href={project.link} target="_blank" rel="noopener noreferrer">
                 <figure className="project-img">
                   <div className="project-item-icon-box">
                     {/*@ts-ignore*/}
