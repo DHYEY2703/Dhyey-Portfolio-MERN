@@ -76,6 +76,7 @@ function App() {
   const handleEnterExperience = () => {
     soundManager.init();
     soundManager.playClick();
+    soundManager.playAmbientMusic();
     setShowSplash(false);
   };
 

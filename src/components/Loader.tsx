@@ -58,9 +58,9 @@ const Loader: React.FC<LoaderProps> = ({ onComplete }) => {
         overflow: 'hidden'
       }}
     >
-      {/* Massive Background Text Matching Portfolio Color */}
+      {/* Massive Background Text Matching Photo */}
       <motion.div
-        initial={{ scale: 0.8, opacity: 0 }}
+        initial={{ scale: 0.9, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ duration: 1.5, ease: "easeOut" }}
         style={{
@@ -69,14 +69,15 @@ const Loader: React.FC<LoaderProps> = ({ onComplete }) => {
           left: '50%',
           transform: 'translate(-50%, -50%)',
           whiteSpace: 'nowrap',
-          fontSize: '32vw',
+          fontSize: '40vw',
           fontWeight: 900,
-          color: 'var(--orange-yellow-crayola)', // Matches the portfolio theme beautifully
-          opacity: 0.1, // Adjusted for massive prominent watermark without making it unreadable
+          color: '#00FFFF', // Exact cyan color requested from the photo
+          opacity: 1, // Completely solid, exactly like the photo
           zIndex: 1,
-          fontFamily: '"Arial Black", "Montserrat", sans-serif',
-          letterSpacing: '-0.02em',
-          textShadow: '0 0 50px hsla(45, 100%, 72%, 0.3)',
+          fontFamily: '"Arial Black", Impact, sans-serif',
+          letterSpacing: '-0.06em',
+          lineHeight: 1,
+          textShadow: 'none',
         }}
       >
         <div style={{ transform: 'translate(-50%, -50%)' }}>DHYEY</div>
@@ -97,7 +98,8 @@ const Loader: React.FC<LoaderProps> = ({ onComplete }) => {
                 fontWeight: 'bold', 
                 color: 'var(--white-2)', 
                 fontFamily: 'monospace',
-                letterSpacing: '-2px'
+                letterSpacing: '-2px',
+                textShadow: '0 4px 15px rgba(0,0,0,0.6)' // Added readability shadow to pop against the cyan background
               }}>
                 {progress}%
               </div>
