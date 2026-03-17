@@ -1,9 +1,10 @@
-import React, { useState, FormEvent } from 'react';
+import React, { useState } from 'react';
+import type { FormEvent } from 'react';
+import toast from 'react-hot-toast';
 
 const Contact: React.FC = () => {
   const [formData, setFormData] = useState({ fullname: '', email: '', message: '' });
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitStatus, setSubmitStatus] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
 
   const isFormValid = formData.fullname.trim() && formData.email.trim() && formData.message.trim();
 
@@ -12,7 +13,6 @@ const Contact: React.FC = () => {
     if (!isFormValid) return;
 
     setIsSubmitting(true);
-    setSubmitStatus(null);
 
     try {
       const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
@@ -25,13 +25,13 @@ const Contact: React.FC = () => {
       const data = await response.json();
 
       if (response.ok) {
-        setSubmitStatus({ type: 'success', message: '✅ Message sent successfully!' });
+        toast.success('Message sent successfully!');
         setFormData({ fullname: '', email: '', message: '' });
       } else {
-        setSubmitStatus({ type: 'error', message: data.error || '❌ Failed to send message.' });
+        toast.error(data.error || 'Failed to send message.');
       }
     } catch {
-      setSubmitStatus({ type: 'error', message: '❌ Server is not reachable. Please try again later.' });
+      toast.error('Server is not reachable. Please try again later.');
     } finally {
       setIsSubmitting(false);
     }
@@ -58,20 +58,6 @@ const Contact: React.FC = () => {
 
       <section className="contact-form">
         <h3 className="h3 form-title">Contact Form</h3>
-
-        {submitStatus && (
-          <div style={{
-            padding: '12px 16px',
-            marginBottom: '16px',
-            borderRadius: '8px',
-            background: submitStatus.type === 'success' ? 'rgba(76, 175, 80, 0.15)' : 'rgba(244, 67, 54, 0.15)',
-            color: submitStatus.type === 'success' ? '#4caf50' : '#f44336',
-            fontSize: '14px',
-            border: `1px solid ${submitStatus.type === 'success' ? '#4caf5040' : '#f4433640'}`,
-          }}>
-            {submitStatus.message}
-          </div>
-        )}
 
         <form className="form" onSubmit={handleSubmit}>
           <div className="input-wrapper">

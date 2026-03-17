@@ -1884,3 +1884,23 @@ textarea.form-input::-webkit-resizer { display: none; }
   .timeline-text { max-width: 700px; }
 
 }
+
+:root[data-theme="light"] {
+  --bg-gradient-onyx: linear-gradient(to bottom right, hsl(0, 0%, 98%) 3%, hsl(0, 0%, 92%) 97%);
+  --bg-gradient-jet: linear-gradient(to bottom right, hsla(0, 0%, 95%, 0.8) 0%, hsla(0, 0%, 90%, 0) 100%), hsl(0, 0%, 100%);
+  --border-gradient-onyx: linear-gradient(to bottom right, hsl(0, 0%, 80%) 0%, hsla(0, 0%, 80%, 0) 50%);
+  --jet: hsl(0, 0%, 90%);
+  --onyx: hsl(0, 0%, 95%);
+  --eerie-black-1: hsl(0, 0%, 98%);
+  --eerie-black-2: hsl(0, 0%, 100%);
+  --smoky-black: hsl(0, 0%, 95%);
+  --white-1: hsl(0, 0%, 15%);
+  --white-2: hsl(0, 0%, 20%);
+  --light-gray: hsl(0, 0%, 40%);
+  --light-gray-70: hsla(0, 0%, 40%, 0.7);
+  --shadow-1: -4px 8px 24px hsla(0, 0%, 0%, 0.05);
+  --shadow-2: 0 16px 30px hsla(0, 0%, 0%, 0.05);
+  --shadow-3: 0 16px 40px hsla(0, 0%, 0%, 0.05);
+  --shadow-4: 0 25px 50px hsla(0, 0%, 0%, 0.03);
+  --shadow-5: 0 24px 80px hsla(0, 0%, 0%, 0.05);
+}

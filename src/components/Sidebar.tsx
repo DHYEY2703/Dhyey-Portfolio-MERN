@@ -1,6 +1,11 @@
 import React, { useState } from 'react';
 
-const Sidebar: React.FC = () => {
+interface SidebarProps {
+  toggleTheme: () => void;
+  theme: string;
+}
+
+const Sidebar: React.FC<SidebarProps> = ({ toggleTheme, theme }) => {
   const [isActive, setIsActive] = useState(false);
 
   return (
@@ -10,9 +15,31 @@ const Sidebar: React.FC = () => {
           <img src="/assets/images/my-avatar.png" alt="Dhyey Barbhaya" width="80" />
         </figure>
 
-        <div className="info-content">
+        <div className="info-content" style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
           <h1 className="name" title="Dhyey Barbhaya">Dhyey Barbhaya</h1>
-          <p className="title">Full Stack Developer</p>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <p className="title">Full Stack Developer</p>
+            <button 
+              onClick={toggleTheme} 
+              style={{ 
+                background: 'var(--border-gradient-onyx)', 
+                color: 'var(--orange-yellow-crayola)', 
+                border: 'none', 
+                borderRadius: '8px', 
+                width: '35px', 
+                height: '35px', 
+                display: 'flex', 
+                alignItems: 'center', 
+                justifyContent: 'center', 
+                cursor: 'pointer',
+                boxShadow: 'var(--shadow-1)'
+              }}
+              title="Toggle Theme"
+            >
+              {/*@ts-ignore*/}
+              <ion-icon name={theme === 'dark' ? 'sunny-outline' : 'moon-outline'}></ion-icon>
+            </button>
+          </div>
         </div>
 
         <button 
