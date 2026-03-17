@@ -35,11 +35,19 @@ const OrbitingNodes = () => {
 
         return (
           <Float key={skill.name} speed={2} rotationIntensity={1.5} floatIntensity={1.5} position={[x, y, z]}>
-            <mesh>
-              <boxGeometry args={[0.45, 0.45, 0.45]} />
-              <meshStandardMaterial color={skill.color} emissive={skill.color} emissiveIntensity={0.4} roughness={0.1} metalness={0.8} />
-            </mesh>
-            <Text position={[0, -0.65, 0]} fontSize={0.28} color="#ffffff" anchorX="center" anchorY="middle" outlineWidth={0.03} outlineColor="#000000" fontWeight="bold">
+            <group>
+              {/* Outer tech frame */}
+              <mesh>
+                <boxGeometry args={[0.5, 0.5, 0.5]} />
+                <meshStandardMaterial color={skill.color} wireframe={true} emissive={skill.color} emissiveIntensity={0.8} transparent opacity={0.6} />
+              </mesh>
+              {/* Inner glowing core */}
+              <mesh>
+                <octahedronGeometry args={[0.2, 0]} />
+                <meshStandardMaterial color="#ffffff" emissive={skill.color} emissiveIntensity={1} roughness={0.1} metalness={0.8} />
+              </mesh>
+            </group>
+            <Text position={[0, -0.7, 0]} fontSize={0.28} color="#ffffff" anchorX="center" anchorY="middle" outlineWidth={0.03} outlineColor="#000000" fontWeight="bold">
               {skill.name}
             </Text>
           </Float>
