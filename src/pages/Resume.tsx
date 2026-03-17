@@ -1,4 +1,14 @@
 import React from 'react';
+import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer, Tooltip } from 'recharts';
+
+const skillsData = [
+  { subject: 'React', val: 90, fullMark: 100 },
+  { subject: 'Node.js', val: 85, fullMark: 100 },
+  { subject: 'MongoDB', val: 80, fullMark: 100 },
+  { subject: 'TypeScript', val: 85, fullMark: 100 },
+  { subject: 'HTML/CSS', val: 95, fullMark: 100 },
+  { subject: 'Python', val: 75, fullMark: 100 },
+];
 
 const Resume: React.FC = () => {
   return (
@@ -18,9 +28,11 @@ const Resume: React.FC = () => {
             textDecoration: 'none',
             pointerEvents: 'auto',
             cursor: 'pointer',
+            width: 'max-content',
+            marginTop: '15px',
           }}
         >
-          {/*@ts-ignore*/}
+          {/*@ts-expect-error: ion-icon is a custom web component*/}
           <ion-icon name="download-outline"></ion-icon>
           <span>Download CV</span>
         </a>
@@ -29,7 +41,7 @@ const Resume: React.FC = () => {
       <section className="timeline">
         <div className="title-wrapper">
           <div className="icon-box">
-            {/*@ts-ignore*/}
+            {/*@ts-expect-error: ion-icon is a custom web component*/}
             <ion-icon name="book-outline"></ion-icon>
           </div>
           <h3 className="h3">Education</h3>
@@ -63,77 +75,46 @@ const Resume: React.FC = () => {
       <section className="timeline">
         <div className="title-wrapper">
           <div className="icon-box">
-            {/*@ts-ignore*/}
-            <ion-icon name="book-outline"></ion-icon>
+            {/*@ts-expect-error: ion-icon is a custom web component*/}
+            <ion-icon name="briefcase-outline"></ion-icon>
           </div>
           <h3 className="h3">Experience</h3>
         </div>
 
         <ol className="timeline-list">
           <li className="timeline-item">
-            <h4 className="h4 timeline-item-title">Creative director</h4>
-            <span>2015 — Present</span>
+            <h4 className="h4 timeline-item-title">Full Stack Developer</h4>
+            <span>2023 — Present</span>
             <p className="timeline-text">
-              Nemo enim ipsam voluptatem blanditiis praesentium voluptum delenit atque corrupti, quos dolores et qvuas molestias exceptur.
+              Developed scalable MERN stack web applications and ERP solutions. Integrated AI components for predictive analysis, implemented modern design frameworks, and utilized responsive frontend technologies.
             </p>
           </li>
           <li className="timeline-item">
-            <h4 className="h4 timeline-item-title">Art director</h4>
-            <span>2013 — 2015</span>
+            <h4 className="h4 timeline-item-title">Frontend Developer</h4>
+            <span>2021 — 2023</span>
             <p className="timeline-text">
-              Nemo enims ipsam voluptatem, blanditiis praesentium voluptum delenit atque corrupti, quos dolores et quas molestias exceptur.
-            </p>
-          </li>
-          <li className="timeline-item">
-            <h4 className="h4 timeline-item-title">Web designer</h4>
-            <span>2010 — 2013</span>
-            <p className="timeline-text">
-              Nemo enims ipsam voluptatem, blanditiis praesentium voluptum delenit atque corrupti, quos dolores et quas molestias exceptur.
+              Specialized in React, building dynamic UI components, state management using Redux, and ensuring mobile-first responsive design across enterprise applications.
             </p>
           </li>
         </ol>
       </section>
 
       <section className="skill">
-        <h3 className="h3 skills-title">My skills</h3>
-        <ul className="skills-list content-card">
-          <li className="skills-item">
-            <div className="title-wrapper">
-              <h5 className="h5">Web design</h5>
-              <data value="80">80%</data>
-            </div>
-            <div className="skill-progress-bg">
-              <div className="skill-progress-fill" style={{ width: '80%' }}></div>
-            </div>
-          </li>
-          <li className="skills-item">
-            <div className="title-wrapper">
-              <h5 className="h5">Graphic design</h5>
-              <data value="70">70%</data>
-            </div>
-            <div className="skill-progress-bg">
-              <div className="skill-progress-fill" style={{ width: '70%' }}></div>
-            </div>
-          </li>
-          <li className="skills-item">
-            <div className="title-wrapper">
-              <h5 className="h5">Branding</h5>
-              <data value="90">90%</data>
-            </div>
-            <div className="skill-progress-bg">
-              <div className="skill-progress-fill" style={{ width: '90%' }}></div>
-            </div>
-          </li>
-          <li className="skills-item">
-            <div className="title-wrapper">
-              <h5 className="h5">WordPress</h5>
-              <data value="50">50%</data>
-            </div>
-            <div className="skill-progress-bg">
-              <div className="skill-progress-fill" style={{ width: '50%' }}></div>
-            </div>
-          </li>
-        </ul>
+        <h3 className="h3 skills-title">Technical Skills</h3>
+        <div className="content-card" style={{ height: '400px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          <ResponsiveContainer width="100%" height="100%">
+            <RadarChart cx="50%" cy="50%" outerRadius="70%" data={skillsData}>
+              <PolarGrid stroke="var(--jet)" />
+              <PolarAngleAxis dataKey="subject" tick={{ fill: 'var(--white-2)', fontSize: 13 }} />
+              <PolarRadiusAxis angle={30} domain={[0, 100]} tick={{ fill: 'var(--light-gray)' }} />
+              <Radar name="Proficiency" dataKey="val" stroke="#fdbf5c" fill="#fdbf5c" fillOpacity={0.6} />
+              <Tooltip 
+                contentStyle={{ backgroundColor: 'var(--eerie-black-1)', border: '1px solid var(--jet)', borderRadius: '8px' }}
+                itemStyle={{ color: '#fdbf5c' }}
+              />
+            </RadarChart>
+          </ResponsiveContainer>
+        </div>
       </section>
     </article>
   );
