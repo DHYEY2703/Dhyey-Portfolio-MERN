@@ -6,8 +6,8 @@ const Resume: React.FC = () => {
       <header style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '30px' }}>
         <h2 className="h2 article-title">Resume</h2>
         <a 
-          href="/assets/resume/Dhyey_Barbhaya_Resume.pdf" 
-          download="Dhyey_Barbhaya_Resume.pdf"
+          href="/assets/resume/DHYEY_MERN_RESUME.pdf" 
+          download="DHYEY_MERN_RESUME.pdf"
           className="form-btn"
           style={{ 
             display: 'inline-flex', 
