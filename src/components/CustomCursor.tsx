@@ -36,18 +36,18 @@ const CustomCursor: React.FC = () => {
 
   const variants = {
     default: {
-      x: mousePosition.x - 16,
-      y: mousePosition.y - 16,
+      x: mousePosition.x - 12,
+      y: mousePosition.y - 12,
       scale: 1,
-      backgroundColor: 'transparent',
-      border: '2px solid var(--orange-yellow-crayola)'
+      backgroundColor: 'var(--orange-yellow-crayola)',
+      border: 'none'
     },
     hover: {
-      x: mousePosition.x - 16,
-      y: mousePosition.y - 16,
+      x: mousePosition.x - 12,
+      y: mousePosition.y - 12,
       scale: 1.5,
-      backgroundColor: 'hsla(45, 100%, 72%, 0.1)',
-      border: '2px solid var(--orange-yellow-crayola)'
+      backgroundColor: 'var(--orange-yellow-crayola)',
+      border: 'none'
     }
   };
 
@@ -60,24 +60,14 @@ const CustomCursor: React.FC = () => {
         position: 'fixed',
         top: 0,
         left: 0,
-        width: '32px',
-        height: '32px',
+        width: '24px',
+        height: '24px',
         borderRadius: '50%',
         pointerEvents: 'none',
         zIndex: 9999,
         mixBlendMode: 'difference'
       }}
     >
-      <div style={{
-        position: 'absolute',
-        top: '50%',
-        left: '50%',
-        transform: 'translate(-50%, -50%)',
-        width: '4px',
-        height: '4px',
-        backgroundColor: 'var(--orange-yellow-crayola)',
-        borderRadius: '50%'
-      }}></div>
     </motion.div>
   );
 };
