@@ -1,81 +1,87 @@
-# Dhyey Barbhaya – Personal Portfolio
+# Dhyey Barbhaya — Enterprise MERN Stack Portfolio 🚀
 
-A modern personal portfolio website built with **React**, **TypeScript**, **Three.js**, and **Vite**.
+A high-performance, interactive, and fully-featured personal portfolio web application built from the ground up to showcase mastery of full-stack engineering. 
 
-## ✨ Features
+This is not a static site; it is a **dynamic, Dockerized SaaS-grade architecture** featuring a custom Content Management System (CMS), live WebSocket connections, and advanced MongoDB analytics.
 
-- ⚡ Built with **Vite** + **React** + **TypeScript**
-- 🌌 Interactive **Three.js** starfield background
-- 📱 Fully responsive design
-- 📄 Sections: About, Resume, Portfolio, Blog, Contact
-- 🎨 Dark theme with golden accents
-- 🖼️ Client logos, testimonials, and project showcase
-- 📬 Contact form with Google Maps integration
+## ✨ Premium Features
 
-## 🚀 Getting Started
+### 🔐 Secure Backend & Admin Dashboard
+- **Custom Admin Panel:** Secured by JSON Web Tokens (JWT) with strict route protection middleware.
+- **RESTful API:** Robust Node/Express endpoints connected to MongoDB.
+- **Content Management System (CMS):** Create, publish, and manage blog posts directly from the private dashboard.
+- **Live Traffic Analytics:** Built-in unique session visitor tracking rendered onto the dashboard via `recharts`.
 
-### Prerequisites
+### ⚡ Real-Time WebSockets
+- **Live Event Driven Notifications:** Integrated `Socket.io` connection streams instantly alerts the admin dashboard whenever a recruiter sends a contact form message.
 
-- Node.js (v18+)
-- npm
+### ✉️ Automated Messaging System
+- **Nodemailer Integration:** Background job processing to instantly send rich HTML auto-replies to visitors and simultaneous notification emails to the owner.
 
-### Installation
+### 🎨 State-of-the-Art Frontend
+- **Built with React + Vite + TypeScript** for maximum performance and strict type safety.
+- **Three.js Integrations:** 3D interactive particle animations and a physics-based tech stack sphere.
+- **Dynamic GitHub Graph:** Live fetches and renders the user's continuous GitHub code contribution history using a styled heatmap.
+- **Custom Aesthetic:** Global custom responsive cursor, immersive Framer Motion page transitions, and subtle ambient sound design logic.
+- **Interactive Chatbot:** A collapsible AI-style chat widget interface for guiding visitors.
 
-```bash
-npm install
+### 🐳 Advanced DevOps & SEO
+- **Full Dockerization:** Production-ready `Dockerfile` multi-stage builds (Nginx Alpine) + complete orchestration via `docker-compose.yml`.
+- **Advanced SEO Optimization:** Asynchronous dynamic meta-tagging via `react-helmet-async`, structured `sitemap.xml`, and strict crawler instructions.
+
+---
+
+## 🚀 Getting Started Locally
+
+### Environment Setup
+Create a `.env` file in the `/server` directory with the following variables:
+```env
+MONGO_URI=your_mongodb_connection_string
+PORT=5000
+EMAIL_USER=your_email@gmail.com
+EMAIL_PASS=your_app_password
+JWT_SECRET=super_secret_jwt_key
+ADMIN_PASSWORD=your_secure_password
 ```
 
-### Development
-
+### Option A: Standard Initialization
+**1. Start the Backend API**
 ```bash
+cd server
+npm install
+npm run dev
+```
+**2. Start the Frontend Application**
+```bash
+npm install
 npm run dev
 ```
 
-### Build for Production
-
+### Option B: Docker Containers
+If you have Docker Desktop installed, you can spin up the entire architecture (DB, Frontend, API) natively:
 ```bash
-npm run build
+docker compose up -d --build
 ```
 
-### Preview Production Build
+---
 
-```bash
-npm run preview
-```
+## 🛠️ Technology Stack Breakdown
 
-## 📁 Project Structure
+| Layer | Technologies |
+| :--- | :--- |
+| **Frontend Setup** | React (Vite), TypeScript, HTML5, CSS3, Framer Motion |
+| **Backend & APIs** | Node.js, Express.js |
+| **Database & ODM** | MongoDB, Mongoose |
+| **Authentication** | JSON Web Tokens (JWT), bcrypt |
+| **Real-Time Data** | Socket.IO, Recharts |
+| **Email Service**  | Nodemailer |
+| **Graphics**       | Three.js (@react-three/fiber), Canvas Confetti |
+| **DevOps**         | Docker, Docker Compose, Nginx |
 
-```
-src/
-├── components/
-│   ├── Background3D.tsx    # Three.js starfield
-│   ├── Navbar.tsx          # Navigation bar
-│   └── Sidebar.tsx         # Sidebar with contact info
-├── pages/
-│   ├── About.tsx           # About page
-│   ├── Resume.tsx          # Resume page
-│   ├── Portfolio.tsx       # Portfolio page
-│   ├── Blog.tsx            # Blog page
-│   └── Contact.tsx         # Contact page
-├── App.tsx                 # Main app component
-├── main.tsx                # Entry point
-└── index.css               # Global styles
-```
+---
 
-## 🛠️ Tech Stack
+## ⚖️ License (Proprietary)
 
-- [React](https://react.dev/)
-- [TypeScript](https://www.typescriptlang.org/)
-- [Vite](https://vitejs.dev/)
-- [Three.js](https://threejs.org/) via [@react-three/fiber](https://docs.pmnd.rs/react-three-fiber)
-- [Framer Motion](https://www.framer.com/motion/)
+**Copyright © 2026 Dhyey Barbhaya. All Rights Reserved.**
 
-## 📝 License
-
-MIT
-
-## 👤 Author
-
-**Dhyey Barbhaya**
-- GitHub: [@DHYEY2703](https://github.com/DHYEY2703)
-- Email: dhyeybarbhaya@gmail.com
+This software is the proprietary property of Dhyey Barbhaya. It is intended for portfolio demonstration viewings only. It cannot be used, modified, sub-licensed, or re-distributed by individuals or organizations without express written consent. See the `LICENSE` file for more details.
