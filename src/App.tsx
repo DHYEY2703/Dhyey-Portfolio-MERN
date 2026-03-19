@@ -17,6 +17,7 @@ import Loader from './components/Loader';
 import { soundManager } from './utils/SoundManager';
 import ChatbotWidget from './components/ChatbotWidget';
 import confetti from 'canvas-confetti';
+import { Helmet } from 'react-helmet-async';
 
 function App() {
   const [showSplash, setShowSplash] = useState(true);
@@ -145,6 +146,14 @@ function App() {
 
   return (
     <>
+      <Helmet>
+        <title>Dhyey Barbhaya | Full Stack Developer</title>
+        <meta name="description" content="Portfolio of Dhyey Barbhaya. I specialize in the MERN stack, AI integration, and scalable web apps." />
+        <meta property="og:title" content="Dhyey Barbhaya Portfolio" />
+        <meta property="og:description" content="Discover my latest projects in React, Node.js, AI, and comprehensive MERN Stack architectures." />
+        <meta property="og:url" content="https://dhyeybarbhaya.com" />
+        <meta name="twitter:card" content="summary_large_image" />
+      </Helmet>
       <CustomCursor />
       <Toaster position="top-right" />
       <FloatingContact />
