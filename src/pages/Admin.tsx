@@ -24,7 +24,6 @@ const mockAnalyticsData = [
 
 const Admin: React.FC = () => {
   const [messages, setMessages] = useState<Message[]>([]);
-  const [socket, setSocket] = useState<Socket | null>(null);
   const [blogs, setBlogs] = useState<any[]>([]);
   const [newBlog, setNewBlog] = useState({ title: '', category: '', text: '', img: '' });
   const [isSubmittingBlog, setIsSubmittingBlog] = useState(false);
@@ -44,7 +43,6 @@ const Admin: React.FC = () => {
       // Connect WebSocket
       const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
       newSocket = io(API_URL);
-      setSocket(newSocket);
 
       // Listen for Live Messages
       newSocket.on('new_message', (msg: Message) => {
