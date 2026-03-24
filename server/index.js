@@ -6,6 +6,9 @@ const http = require('http');
 const { Server } = require('socket.io');
 require('dotenv').config();
 
+const { GoogleGenerativeAI } = require('@google/generative-ai');
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
@@ -55,6 +58,79 @@ const Message = mongoose.model('Message', messageSchema);
 // Health Check
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', message: 'Portfolio Backend is running 🚀' });
+});
+
+// POST - AI Chatbot
+app.post('/api/chat', async (req, res) => {
+  try {
+    const { message, conversationHistory } = req.body;
+    if (!message) return res.status(400).json({ error: 'Message is required' });
+
+    const systemPrompt = `You are Dhyey's AI Assistant — a warm, enthusiastic, and knowledgeable chatbot embedded in the personal portfolio website of Dhyey Barbhaya. Your job is to impress visitors and help them learn about Dhyey.
+
+## About Dhyey Barbhaya
+- Full Stack Developer from Vadodara, Gujarat, India.
+- Born on July 2, 2004. Currently pursuing his education while building real-world projects.
+- Passionate about creating scalable, high-performance web applications with clean code and stunning user interfaces.
+
+## Technical Skills
+- **Frontend**: React.js, Next.js, TypeScript, Three.js (3D web), Framer Motion, HTML5, CSS3
+- **Backend**: Node.js, Express.js, Python, REST APIs, WebSockets (Socket.io)
+- **Databases**: MongoDB, Mongoose
+- **AI/ML**: AI microservice integrations, predictive analytics, sales forecasting models
+- **DevOps**: Docker, Git/GitHub, CI/CD
+- **Other**: JWT Auth, Nodemailer, Recharts, React Three Fiber
+
+## Key Projects (describe these in detail when asked)
+1. **RMS ERP System** — A comprehensive enterprise resource planning system for restaurant management. Full stack MERN app with role-based access control, inventory management, and real-time order tracking.
+2. **AI Sales Forecaster** — An intelligent application that uses AI/ML models to predict future sales trends based on historical data. Features interactive dashboards with Recharts visualizations.
+3. **Attendance Management System (AMS)** — A full-stack system for schools/colleges with features like class-based attendance reports, multi-language support (English, Hindi, Gujarati), and a forgot password flow with email-based OTP reset.
+4. **MERN 3D Portfolio** — This very website! A stunning portfolio featuring 3D particle backgrounds, custom cursors, sound effects, an AI chatbot (you!), admin dashboard, blog CMS, and real-time visitor analytics.
+5. **NovaHardware Store (E-commerce)** — A full e-commerce platform with product catalog, cart system, payment integration, and admin dashboard with order management.
+6. **Feedback System** — A dynamic feedback collection and analytics system with PDF/Excel export functionality and an admin dashboard.
+
+## Contact Information
+- Email: dhyeybarbhaya@gmail.com
+- Phone: +91 8347938469
+- GitHub: https://github.com/DHYEY2703
+- Location: Vadodara, Gujarat, India
+
+## Response Guidelines
+- Always give complete, well-structured answers. Never cut off mid-sentence.
+- Keep responses 3-5 sentences long. Be informative but not excessively long.
+- Be enthusiastic and positive about Dhyey's work. Highlight his strengths naturally.
+- Use a friendly, professional tone — like a helpful colleague introducing you to Dhyey.
+- When asked about projects, describe them with specific technologies and features.
+- If asked unrelated questions (politics, random trivia, etc.), politely redirect: "That's an interesting topic! But I'm best at telling you about Dhyey's amazing development work. Want to hear about his projects?"
+- Never make up information. Stick to the facts above.`;
+
+    const model = genAI.getGenerativeModel({
+      model: "gemini-flash-latest",
+      systemInstruction: systemPrompt
+    });
+
+    // Map conversation history format if passed from frontend
+    const history = (conversationHistory || []).map(msg => ({
+      role: msg.sender === 'user' ? 'user' : 'model',
+      parts: [{ text: msg.text }]
+    }));
+
+    const chatSession = model.startChat({
+      history: history,
+      generationConfig: {
+        maxOutputTokens: 500,
+        temperature: 0.8,
+      }
+    });
+
+    const result = await chatSession.sendMessage(message);
+    const reply = result.response.text();
+    
+    res.json({ reply });
+  } catch (error) {
+    console.error('Gemini API Error:', error.message);
+    res.status(500).json({ error: 'AI is temporarily unavailable.' });
+  }
 });
 
 // POST - Contact Form Submission

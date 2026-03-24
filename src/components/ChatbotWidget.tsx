@@ -17,7 +17,7 @@ const ChatbotWidget: React.FC = () => {
     scrollToBottom();
   }, [messages]);
 
-  const handleSend = () => {
+  const handleSend = async () => {
     if (!inputVal.trim()) return;
     
     // Add user message
@@ -25,21 +25,26 @@ const ChatbotWidget: React.FC = () => {
     setMessages(newMessages);
     setInputVal('');
 
-    // Mock AI Response
-    setTimeout(() => {
-      const lowerInput = inputVal.toLowerCase();
-      let botReply = "I'm just a demo AI for now, but I can assure you Dhyey is a fantastic Full Stack Developer!";
-      
-      if (lowerInput.includes('skills') || lowerInput.includes('tech') || lowerInput.includes('stack')) {
-        botReply = "Dhyey is an expert in the MERN stack (MongoDB, Express, React, Node.js), TypeScript, Python, and 3D web technologies!";
-      } else if (lowerInput.includes('project') || lowerInput.includes('work')) {
-        botReply = "Dhyey has built amazing projects including the RMS ERP System, an AI Sales Forecaster, and an Attendance Management system.";
-      } else if (lowerInput.includes('contact') || lowerInput.includes('hire') || lowerInput.includes('email')) {
-        botReply = "You can contact him directly at dhyeybarbhaya@gmail.com or use the contact form on this site!";
-      }
+    try {
+      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+      const response = await fetch(`${API_URL}/api/chat`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          message: inputVal,
+          // Pass history to maintain context
+          conversationHistory: messages.slice(1) // exclude the first greeting message
+        })
+      });
 
-      setMessages((prev) => [...prev, { sender: 'bot', text: botReply }]);
-    }, 1000);
+      if (!response.ok) throw new Error('Failed to fetch from OpenAI');
+
+      const data = await response.json();
+      setMessages((prev) => [...prev, { sender: 'bot', text: data.reply }]);
+    } catch (error) {
+      console.error('Chat API Error:', error);
+      setMessages((prev) => [...prev, { sender: 'bot', text: "Sorry, I am currently offline or experienced an error." }]);
+    }
   };
 
   return (
@@ -51,12 +56,14 @@ const ChatbotWidget: React.FC = () => {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.9 }}
             style={{
+              position: 'absolute',
+              bottom: '70px',
+              left: '0',
               width: '320px',
               height: '420px',
               backgroundColor: 'var(--eerie-black-1)',
               borderRadius: '15px',
               border: '1px solid var(--jet)',
-              marginBottom: '15px',
               display: 'flex',
               flexDirection: 'column',
               boxShadow: '0 10px 30px rgba(0,0,0,0.5)',

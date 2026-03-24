@@ -10,25 +10,25 @@ const About: React.FC = () => {
       name: 'Rishav Desai',
       avatar: '/assets/images/avatar-1.png',
       date: '14 June, 2021',
-      text: `"Dhyey did an outstanding job creating our corporate identity. She listened carefully to our ideas and transformed them into a design that truly reflects our brand. Her creativity and attention to detail were exceptional, and the final result exceeded our expectations. We couldn't be happier with her work and would recommend her without hesitatio"`
+      text: `"Dhyey did an outstanding job creating our corporate identity. He listened carefully to our ideas and transformed them into a design that truly reflects our brand. His creativity and attention to detail were exceptional, and the final result exceeded our expectations. We couldn't be happier with his work and would recommend him without hesitation."`
     },
     {
       name: 'Kashish Dhulia',
       avatar: '/assets/images/avatar-2.png',
       date: '14 June, 2021',
-      text: `"Working with Dhyey was an absolute pleasure. She took the time to understand our vision and provided a corporate identity that perfectly aligns with our brand values. Dhyey was always responsive, professional, and easy to work with, ensuring the project ran smoothly. We're thrilled with the final design and highly recommend her services."`
+      text: `"Working with Dhyey was an absolute pleasure. He took the time to understand our vision and provided a corporate identity that perfectly aligns with our brand values. Dhyey was always responsive, professional, and easy to work with, ensuring the project ran smoothly. We're thrilled with the final design and highly recommend his services."`
     },
     {
       name: 'Poonam Makhija',
       avatar: '/assets/images/avatar-3.png',
       date: '14 June, 2021',
-      text: `"We are incredibly impressed with the corporate identity that Dhyey created for us. Her process was seamless, and she really understood the essence of our brand. Dhyey’s design captured our vision beautifully and helped elevate our image in the market. We’re extremely satisfied with her work and look forward to working with her again."`
+      text: `"We are incredibly impressed with the corporate identity that Dhyey created for us. His process was seamless, and he really understood the essence of our brand. Dhyey’s design captured our vision beautifully and helped elevate our image in the market. We’re extremely satisfied with his work and look forward to working with him again."`
     },
     {
       name: 'Devanshu Jain',
       avatar: '/assets/images/avatar-4.png',
       date: '14 June, 2021',
-      text: `"Dhyey exceeded our expectations in every way. She took the time to understand our goals and provided us with a corporate identity that is both creative and professional. Her attention to detail and commitment to delivering the best design was evident throughout the process. We are delighted with the final result and highly recommend her to anyone looking for top-tier design work."`
+      text: `"Dhyey exceeded our expectations in every way. He took the time to understand our goals and provided us with a corporate identity that is both creative and professional. His attention to detail and commitment to delivering the best design was evident throughout the process. We are delighted with the final result and highly recommend him to anyone looking for top-tier design work."`
     }
   ];
 

@@ -106,13 +106,13 @@ const Sidebar: React.FC<SidebarProps> = ({ toggleTheme, theme }) => {
 
         <ul className="social-list">
           <li className="social-item">
-            <a href="https://www.facebook.com/" target="_blank" rel="noopener noreferrer" className="social-link">
+            <a href="https://www.facebook.com/share/18ZeJhgwJa/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer" className="social-link">
               {/*@ts-ignore*/}
               <ion-icon name="logo-facebook"></ion-icon>
             </a>
           </li>
           <li className="social-item">
-            <a href="https://twitter.com/" target="_blank" rel="noopener noreferrer" className="social-link">
+            <a href="https://x.com/BarbhayaY64952" target="_blank" rel="noopener noreferrer" className="social-link">
               {/*@ts-ignore*/}
               <ion-icon name="logo-twitter"></ion-icon>
             </a>

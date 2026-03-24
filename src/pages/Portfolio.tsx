@@ -17,7 +17,7 @@ const Portfolio: React.FC = () => {
       title: 'AI Sales Forecaster', 
       category: 'AI Integration', 
       img: '/assets/images/project-2.png',
-      link: 'https://github.com/DHYEY2703/AI-Sales-Forecaster'
+      link: 'https://github.com/DHYEY2703/chatify-by-dhyey'
     },
     { 
       title: 'Attendance Management System (AMS)', 
@@ -35,13 +35,13 @@ const Portfolio: React.FC = () => {
       title: 'E-commerce API', 
       category: 'Backend', 
       img: '/assets/images/project-5.png',
-      link: 'https://github.com/DHYEY2703/Ecommerce-API'
+      link: 'https://github.com/DHYEY2703/NovaHardware-Store'
     },
     { 
       title: 'Dynamic Dashboard', 
       category: 'Web Development', 
       img: '/assets/images/project-6.png',
-      link: 'https://github.com/DHYEY2703/Dashboard'
+      link: 'https://github.com/DHYEY2703/Feeback-System'
     }
   ];
 
