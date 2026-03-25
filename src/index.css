@@ -1889,21 +1889,244 @@ textarea.form-input::-webkit-resizer { display: none; }
 }
 
 :root[data-theme="light"] {
-  --bg-gradient-onyx: linear-gradient(to bottom right, hsl(0, 0%, 98%) 3%, hsl(0, 0%, 92%) 97%);
-  --bg-gradient-jet: linear-gradient(to bottom right, hsla(0, 0%, 95%, 0.8) 0%, hsla(0, 0%, 90%, 0) 100%), hsl(0, 0%, 100%);
-  --border-gradient-onyx: linear-gradient(to bottom right, hsl(0, 0%, 80%) 0%, hsla(0, 0%, 80%, 0) 50%);
-  --jet: hsl(0, 0%, 90%);
-  --onyx: hsl(0, 0%, 95%);
-  --eerie-black-1: hsl(0, 0%, 98%);
-  --eerie-black-2: hsl(0, 0%, 100%);
-  --smoky-black: hsl(0, 0%, 95%);
-  --white-1: hsl(0, 0%, 15%);
-  --white-2: hsl(0, 0%, 20%);
-  --light-gray: hsl(0, 0%, 40%);
-  --light-gray-70: hsla(0, 0%, 40%, 0.7);
-  --shadow-1: -4px 8px 24px hsla(0, 0%, 0%, 0.05);
-  --shadow-2: 0 16px 30px hsla(0, 0%, 0%, 0.05);
-  --shadow-3: 0 16px 40px hsla(0, 0%, 0%, 0.05);
-  --shadow-4: 0 25px 50px hsla(0, 0%, 0%, 0.03);
-  --shadow-5: 0 24px 80px hsla(0, 0%, 0%, 0.05);
+  --bg-gradient-onyx: linear-gradient(
+    to bottom right, 
+    rgba(255, 255, 255, 0.15) 3%, 
+    rgba(255, 255, 255, 0.05) 97%
+  );
+  --bg-gradient-jet: linear-gradient(
+    to bottom right, 
+    rgba(255, 255, 255, 0.2) 0%, 
+    rgba(255, 255, 255, 0.05) 100%
+  );
+  --border-gradient-onyx: linear-gradient(
+    to bottom right, 
+    rgba(255, 255, 255, 0.4) 0%, 
+    rgba(255, 255, 255, 0) 50%
+  );
+  --jet: rgba(255, 255, 255, 0.25);
+  --onyx: rgba(255, 255, 255, 0.12);
+  --eerie-black-1: rgba(255, 255, 255, 0.12);
+  --eerie-black-2: rgba(255, 255, 255, 0.1);
+  --smoky-black: rgba(240, 240, 255, 0.15);
+  --white-1: hsl(220, 20%, 15%);
+  --white-2: hsl(220, 15%, 25%);
+  --orange-yellow-crayola: hsl(45, 100%, 60%);
+  --light-gray: hsl(220, 10%, 40%);
+  --light-gray-70: hsla(220, 10%, 40%, 0.7);
+  --shadow-1: 0 8px 32px rgba(0, 0, 0, 0.08);
+  --shadow-2: 0 16px 40px rgba(0, 0, 0, 0.06);
+  --shadow-3: 0 16px 48px rgba(0, 0, 0, 0.06);
+  --shadow-4: 0 25px 60px rgba(0, 0, 0, 0.04);
+  --shadow-5: 0 24px 80px rgba(0, 0, 0, 0.06);
+}
+
+/* ===== GLASSMORPHISM LIGHT THEME ===== */
+
+:root[data-theme="light"] body {
+  background: #f0f2f5;
+}
+
+/* Glass panels — sidebar & articles */
+:root[data-theme="light"] .sidebar,
+:root[data-theme="light"] article {
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+
+/* Navbar glass */
+:root[data-theme="light"] .navbar {
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+}
+
+:root[data-theme="light"] .navbar-link {
+  color: hsl(220, 15%, 35%);
+}
+
+:root[data-theme="light"] .navbar-link.active {
+  color: hsl(220, 20%, 15%);
+}
+
+/* Content cards glass */
+:root[data-theme="light"] .content-card {
+  background: rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+/* Service items glass */
+:root[data-theme="light"] .service-item {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 14px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+:root[data-theme="light"] .service-item:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+}
+
+/* Blog post items glass */
+:root[data-theme="light"] .blog-post-item > div,
+:root[data-theme="light"] .blog-post-item > a {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+:root[data-theme="light"] .blog-post-item > div:hover,
+:root[data-theme="light"] .blog-post-item > a:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+}
+
+/* Project items glass */
+:root[data-theme="light"] .project-item > div {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+}
+
+/* Testimonial cards glass */
+:root[data-theme="light"] .testimonials-item .content-card {
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+}
+
+/* Timeline cards glass */
+:root[data-theme="light"] .timeline-item::after {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+/* Icon box glass */
+:root[data-theme="light"] .icon-box {
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+:root[data-theme="light"] .icon-box::before {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* Sidebar info_more glass */
+:root[data-theme="light"] .sidebar-info_more {
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Separator glass */
+:root[data-theme="light"] .separator {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* Filter buttons glass */
+:root[data-theme="light"] .filter-list button,
+:root[data-theme="light"] .filter-select {
+  color: hsl(220, 15%, 35%);
+}
+
+:root[data-theme="light"] .filter-list button.active {
+  color: hsl(220, 20%, 15%);
+}
+
+/* Form inputs glass */
+:root[data-theme="light"] .form-input,
+:root[data-theme="light"] textarea {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: hsl(220, 15%, 25%);
+}
+
+:root[data-theme="light"] .form-input::placeholder,
+:root[data-theme="light"] textarea::placeholder {
+  color: hsla(220, 10%, 40%, 0.6);
+}
+
+/* Scrollbar glass */
+:root[data-theme="light"] .has-scrollbar::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+/* Modal glass */
+:root[data-theme="light"] .testimonials-modal,
+:root[data-theme="light"] .modal-container section {
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+/* Clients section glass */
+:root[data-theme="light"] .clients-item {
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+/* GitHub calendar card glass */
+:root[data-theme="light"] .github-calendar .content-card {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+/* Social links hover glow */
+:root[data-theme="light"] .social-link {
+  color: hsl(220, 15%, 35%);
+  transition: color 0.3s, text-shadow 0.3s;
+}
+
+:root[data-theme="light"] .social-link:hover {
+  color: hsl(45, 100%, 60%);
+  text-shadow: 0 0 12px hsla(45, 100%, 60%, 0.4);
+}
+
+/* Info more button glass */
+:root[data-theme="light"] .info_more-btn {
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: hsl(220, 15%, 25%);
+}
+
+/* Skills / timeline glass enhancements */
+:root[data-theme="light"] .timeline-list {
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+:root[data-theme="light"] .skill-progress-fill {
+  background: linear-gradient(to right, hsl(45, 100%, 60%), hsl(35, 100%, 55%));
 }
