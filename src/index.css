@@ -1889,244 +1889,76 @@ textarea.form-input::-webkit-resizer { display: none; }
 }
 
 :root[data-theme="light"] {
-  --bg-gradient-onyx: linear-gradient(
-    to bottom right, 
-    rgba(255, 255, 255, 0.15) 3%, 
-    rgba(255, 255, 255, 0.05) 97%
-  );
-  --bg-gradient-jet: linear-gradient(
-    to bottom right, 
-    rgba(255, 255, 255, 0.2) 0%, 
-    rgba(255, 255, 255, 0.05) 100%
-  );
-  --border-gradient-onyx: linear-gradient(
-    to bottom right, 
-    rgba(255, 255, 255, 0.4) 0%, 
-    rgba(255, 255, 255, 0) 50%
-  );
-  --jet: rgba(255, 255, 255, 0.25);
-  --onyx: rgba(255, 255, 255, 0.12);
-  --eerie-black-1: rgba(255, 255, 255, 0.12);
-  --eerie-black-2: rgba(255, 255, 255, 0.1);
-  --smoky-black: rgba(240, 240, 255, 0.15);
-  --white-1: hsl(220, 20%, 15%);
-  --white-2: hsl(220, 15%, 25%);
-  --orange-yellow-crayola: hsl(45, 100%, 60%);
-  --light-gray: hsl(220, 10%, 40%);
-  --light-gray-70: hsla(220, 10%, 40%, 0.7);
-  --shadow-1: 0 8px 32px rgba(0, 0, 0, 0.08);
-  --shadow-2: 0 16px 40px rgba(0, 0, 0, 0.06);
-  --shadow-3: 0 16px 48px rgba(0, 0, 0, 0.06);
-  --shadow-4: 0 25px 60px rgba(0, 0, 0, 0.04);
-  --shadow-5: 0 24px 80px rgba(0, 0, 0, 0.06);
+  --bg-gradient-onyx: linear-gradient(to bottom right, #ffffff 3%, #fdfcf9 97%);
+  --bg-gradient-jet: linear-gradient(to bottom right, #fdfcf9 0%, #ffffff 100%);
+  --border-gradient-onyx: linear-gradient(to bottom right, #e2ddd4 0%, rgba(226, 221, 212, 0) 50%);
+  --jet: #e2ddd4; /* Subtly darker warm borders */
+  --onyx: #f4f1ea;
+  --eerie-black-1: #fcfbf7;
+  --eerie-black-2: #ffffff; /* Panels */
+  --smoky-black: #fcfbf7; /* Background */
+  --white-1: #1a1916; /* Headings - darker for contrast */
+  --white-2: #38352f; /* Text */
+  --light-gray: #625d53; /* Muted text - improved contrast */
+  --light-gray-70: rgba(117, 113, 101, 0.85);
+  --orange-yellow-crayola: #d96c4e; /* Warm terracotta */
+  --vegas-gold: #c25e40; /* Darker accent for hover */
+  --text-gradient-yellow: linear-gradient(to right, #d96c4e, #c25e40);
+  
+  /* Warmer, more diffuse desk-like shadows */
+  --shadow-1: 0 4px 12px rgba(110, 100, 90, 0.04);
+  --shadow-2: 0 8px 16px rgba(110, 100, 90, 0.04), 0 16px 32px rgba(110, 100, 90, 0.06);
+  --shadow-3: 0 12px 24px rgba(110, 100, 90, 0.05), 0 24px 48px rgba(110, 100, 90, 0.07);
+  --shadow-4: 0 16px 32px rgba(110, 100, 90, 0.05), 0 32px 64px rgba(110, 100, 90, 0.08);
+  --shadow-5: 0 24px 48px rgba(110, 100, 90, 0.06), 0 48px 96px rgba(110, 100, 90, 0.09);
 }
 
-/* ===== GLASSMORPHISM LIGHT THEME ===== */
+/* ===== WARM PAPER THEME ENHANCEMENTS ===== */
 
-:root[data-theme="light"] body {
-  background: #f0f2f5;
-}
-
-/* Glass panels — sidebar & articles */
-:root[data-theme="light"] .sidebar,
-:root[data-theme="light"] article {
-  background: rgba(255, 255, 255, 0.6);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.8);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.9);
-}
-
-/* Navbar glass */
+/* Fix hardcoded dark navbar in light mode */
 :root[data-theme="light"] .navbar {
-  background: rgba(255, 255, 255, 0.12);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 20px;
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+  background: var(--eerie-black-2);
+  border: 1px solid var(--jet);
+  box-shadow: var(--shadow-2);
 }
 
-:root[data-theme="light"] .navbar-link {
-  color: hsl(220, 15%, 35%);
+/* Notebook dot-grid background pattern */
+:root[data-theme="light"] body {
+  background-color: var(--smoky-black);
+  background-image: radial-gradient(rgba(200, 195, 185, 0.4) 1px, transparent 1px);
+  background-size: 24px 24px;
 }
 
-:root[data-theme="light"] .navbar-link.active {
-  color: hsl(220, 20%, 15%);
+/* Elegant light mode text selection */
+:root[data-theme="light"] ::selection {
+  background: rgba(217, 108, 78, 0.2); /* Soft terracotta highlight */
+  color: #1a1916;
 }
 
-/* Content cards glass */
-:root[data-theme="light"] .content-card {
-  background: rgba(255, 255, 255, 0.18);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.5);
-}
-
-/* Service items glass */
-:root[data-theme="light"] .service-item {
-  background: rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  border-radius: 14px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-:root[data-theme="light"] .service-item:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
-}
-
-/* Blog post items glass */
+/* Card hover lift effect */
+:root[data-theme="light"] .service-item,
 :root[data-theme="light"] .blog-post-item > div,
-:root[data-theme="light"] .blog-post-item > a {
-  background: rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  border-radius: 16px;
-  overflow: hidden;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+:root[data-theme="light"] .project-item > div {
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
+:root[data-theme="light"] .service-item:hover,
 :root[data-theme="light"] .blog-post-item > div:hover,
-:root[data-theme="light"] .blog-post-item > a:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+:root[data-theme="light"] .project-item > div:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-3);
 }
 
-/* Project items glass */
-:root[data-theme="light"] .project-item > div {
-  background: rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  border-radius: 16px;
-  overflow: hidden;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
-}
-
-/* Testimonial cards glass */
-:root[data-theme="light"] .testimonials-item .content-card {
-  background: rgba(255, 255, 255, 0.2);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.35);
-}
-
-/* Timeline cards glass */
-:root[data-theme="light"] .timeline-item::after {
-  background: rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-}
-
-/* Icon box glass */
-:root[data-theme="light"] .icon-box {
-  background: rgba(255, 255, 255, 0.25);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-}
-
-:root[data-theme="light"] .icon-box::before {
-  background: rgba(255, 255, 255, 0.2);
-}
-
-/* Sidebar info_more glass */
-:root[data-theme="light"] .sidebar-info_more {
-  border-top: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-/* Separator glass */
-:root[data-theme="light"] .separator {
-  background: rgba(255, 255, 255, 0.2);
-}
-
-/* Filter buttons glass */
-:root[data-theme="light"] .filter-list button,
-:root[data-theme="light"] .filter-select {
-  color: hsl(220, 15%, 35%);
-}
-
-:root[data-theme="light"] .filter-list button.active {
-  color: hsl(220, 20%, 15%);
-}
-
-/* Form inputs glass */
+/* Crisp inputs */
 :root[data-theme="light"] .form-input,
 :root[data-theme="light"] textarea {
-  background: rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  color: hsl(220, 15%, 25%);
+  background: #ffffff;
+  border: 1px solid #e2ddd4;
+  box-shadow: inset 0 2px 4px rgba(110, 100, 90, 0.02);
 }
 
-:root[data-theme="light"] .form-input::placeholder,
-:root[data-theme="light"] textarea::placeholder {
-  color: hsla(220, 10%, 40%, 0.6);
-}
-
-/* Scrollbar glass */
-:root[data-theme="light"] .has-scrollbar::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.15);
-}
-
-/* Modal glass */
-:root[data-theme="light"] .testimonials-modal,
-:root[data-theme="light"] .modal-container section {
-  background: rgba(255, 255, 255, 0.2);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-}
-
-/* Clients section glass */
-:root[data-theme="light"] .clients-item {
-  background: rgba(255, 255, 255, 0.12);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 12px;
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-}
-
-/* GitHub calendar card glass */
-:root[data-theme="light"] .github-calendar .content-card {
-  background: rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-}
-
-/* Social links hover glow */
-:root[data-theme="light"] .social-link {
-  color: hsl(220, 15%, 35%);
-  transition: color 0.3s, text-shadow 0.3s;
-}
-
-:root[data-theme="light"] .social-link:hover {
-  color: hsl(45, 100%, 60%);
-  text-shadow: 0 0 12px hsla(45, 100%, 60%, 0.4);
-}
-
-/* Info more button glass */
-:root[data-theme="light"] .info_more-btn {
-  background: rgba(255, 255, 255, 0.2);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  color: hsl(220, 15%, 25%);
-}
-
-/* Skills / timeline glass enhancements */
-:root[data-theme="light"] .timeline-list {
-  border-color: rgba(255, 255, 255, 0.25);
-}
-
-:root[data-theme="light"] .skill-progress-fill {
-  background: linear-gradient(to right, hsl(45, 100%, 60%), hsl(35, 100%, 55%));
+:root[data-theme="light"] .form-input:focus,
+:root[data-theme="light"] textarea:focus {
+  border-color: var(--orange-yellow-crayola);
+  box-shadow: 0 0 0 3px rgba(217, 108, 78, 0.15);
 }
