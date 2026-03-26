@@ -41,44 +41,46 @@ const ChatbotWidget: React.FC<ChatbotWidgetProps> = ({ setActivePage }) => {
 
     const recognizer = new SpeechRecognition();
     recognizer.continuous = true;
-    recognizer.interimResults = true;
+    recognizer.interimResults = false; // Wait for full sentence pauses
     recognizer.lang = 'en-US';
 
     recognizer.onresult = (event: any) => {
-      // Don't listen to background noise or our own TTS voice
-      if (isSpeakingRef.current || isListening || commandLockRef.current) return;
+      // Don't listen to our own TTS voice
+      if (isSpeakingRef.current) return;
 
-      for (let i = event.resultIndex; i < event.results.length; i++) {
-        const transcript = event.results[i][0].transcript.toLowerCase();
-        
-        // Sometimes recognition mishears DJ as TJ or CJ
-        if (transcript.includes('dj') || transcript.includes('hey dj') || transcript.includes('d j')) {
-           // ✨ WAKE WORD DETECTED ✨
-           commandLockRef.current = true; // Lock out background loop
-           recognizer.stop(); 
-           setIsOpen(true);
-           isSpeakingRef.current = true; 
+      const latestPhrase = event.results[event.results.length - 1][0].transcript.toLowerCase().trim();
+      if (!latestPhrase) return;
 
-           if ('speechSynthesis' in window) {
-              const utterance = new SpeechSynthesisUtterance("I am here.");
-              utterance.onend = () => {
-                 isSpeakingRef.current = false;
-                 // Start listening to actual command
-                 handleVoiceInput();
-              };
-              window.speechSynthesis.speak(utterance);
-           } else {
-              isSpeakingRef.current = false;
-              handleVoiceInput();
-           }
-           break; 
-        }
+      // 1. If we're already waiting for their question (Mic is glowing green)
+      if (commandLockRef.current) {
+        commandLockRef.current = false; // lock released
+        setIsListening(false); // mic stops glowing
+        setInputVal(latestPhrase);
+        handleSend(latestPhrase, true);
+        return;
+      }
+
+      // 2. Otherwise, we are passively listening for the Wake Word
+      if (latestPhrase.includes('dj') || latestPhrase.includes('hey dj')) {
+         // ✨ WAKE WORD DETECTED ✨
+         commandLockRef.current = true; // Now wait for question on next breath
+         setIsListening(true); // Mic glows green securely
+         setIsOpen(true);
+         isSpeakingRef.current = true; 
+
+         if ('speechSynthesis' in window) {
+            const utterance = new SpeechSynthesisUtterance("I am here.");
+            utterance.onend = () => { isSpeakingRef.current = false; };
+            window.speechSynthesis.speak(utterance);
+         } else {
+            isSpeakingRef.current = false;
+         }
       }
     };
 
     recognizer.onend = () => {
-       // Auto-loop ONLY if we aren't currently waiting for a secondary command voice prompt
-       if (wakeWordEnabled && !isSpeakingRef.current && !commandLockRef.current) {
+       // Loop endlessly
+       if (wakeWordEnabled) {
            try { recognizer.start(); } catch(e) {}
        }
     };
@@ -94,7 +96,7 @@ const ChatbotWidget: React.FC<ChatbotWidgetProps> = ({ setActivePage }) => {
          wakeWordRecognizerRef.current.stop();
       }
     };
-  }, [wakeWordEnabled, isListening]);
+  }, [wakeWordEnabled]);
   // ------------------------------------------
 
   const suggestions = [
@@ -123,18 +125,20 @@ const ChatbotWidget: React.FC<ChatbotWidgetProps> = ({ setActivePage }) => {
       utterance.onstart = () => { isSpeakingRef.current = true; };
       utterance.onend = () => { 
         isSpeakingRef.current = false; 
-        // We only restart the wake word here if a voice interaction is entirely finished 
-        // We do not restart it here if it's the middle of a command flow
-        if (wakeWordEnabled && wakeWordRecognizerRef.current && !commandLockRef.current) {
-           try { wakeWordRecognizerRef.current.start(); } catch(e) {}
-        }
       };
       
       window.speechSynthesis.speak(utterance);
     }
   };
 
-  const handleVoiceInput = () => {
+  function handleVoiceInput() {
+    // If background listener is already acting as host, borrow it!
+    if (wakeWordEnabled) {
+      commandLockRef.current = true;
+      setIsListening(true);
+      return;
+    }
+
     // @ts-expect-error: WebKit prefix
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     if (!SpeechRecognition) {
@@ -148,16 +152,7 @@ const ChatbotWidget: React.FC<ChatbotWidgetProps> = ({ setActivePage }) => {
 
     recognition.onstart = () => setIsListening(true);
     recognition.onerror = () => setIsListening(false);
-    recognition.onend = () => {
-      setIsListening(false);
-      // Once foreground mic finishes, release lock and safely restart background WakeWord loop
-      setTimeout(() => {
-         commandLockRef.current = false;
-         if (wakeWordEnabled && wakeWordRecognizerRef.current) {
-            try { wakeWordRecognizerRef.current.start(); } catch (e) {}
-         }
-      }, 300);
-    };
+    recognition.onend = () => setIsListening(false);
     recognition.onresult = (event: any) => {
       const transcript = event.results[0][0].transcript;
       setInputVal(transcript);
@@ -166,7 +161,7 @@ const ChatbotWidget: React.FC<ChatbotWidgetProps> = ({ setActivePage }) => {
     recognition.start();
   };
 
-  const handleSend = async (overrideText?: string, useVoiceResponse?: boolean) => {
+  async function handleSend(overrideText?: string, useVoiceResponse?: boolean) {
     const textToSend = typeof overrideText === 'string' ? overrideText : inputVal;
     if (!textToSend.trim()) return;
     
