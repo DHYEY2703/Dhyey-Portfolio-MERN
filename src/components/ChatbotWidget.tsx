@@ -12,7 +12,87 @@ const ChatbotWidget: React.FC<ChatbotWidgetProps> = ({ setActivePage }) => {
   ]);
   const [inputVal, setInputVal] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [isListening, setIsListening] = useState(false);
+  const [wakeWordEnabled, setWakeWordEnabled] = useState(true);
+  
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const isSpeakingRef = useRef(false);
+  const wakeWordRecognizerRef = useRef<any>(null);
+
+  // --- WAKE WORD: ALWAYS LISTENING ENGINE ---
+  useEffect(() => {
+    if (!wakeWordEnabled) {
+      if (wakeWordRecognizerRef.current) {
+        wakeWordRecognizerRef.current.onend = null;
+        wakeWordRecognizerRef.current.stop();
+        wakeWordRecognizerRef.current = null;
+      }
+      return;
+    }
+
+    // @ts-expect-error
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRecognition) {
+      alert("Voice recognition is not supported in this browser.");
+      setWakeWordEnabled(false);
+      return;
+    }
+
+    const recognizer = new SpeechRecognition();
+    recognizer.continuous = true;
+    recognizer.interimResults = true;
+    recognizer.lang = 'en-US';
+
+    recognizer.onresult = (event: any) => {
+      // Don't listen to background noise or our own TTS voice
+      if (isSpeakingRef.current || isListening) return;
+
+      for (let i = event.resultIndex; i < event.results.length; i++) {
+        const transcript = event.results[i][0].transcript.toLowerCase();
+        
+        if (transcript.includes('hey dj') || transcript.includes('hello dj')) {
+           // ✨ WAKE WORD DETECTED ✨
+           recognizer.stop(); // Briefly stop continuous scanning
+           setIsOpen(true);
+           isSpeakingRef.current = true; 
+
+           if ('speechSynthesis' in window) {
+              const utterance = new SpeechSynthesisUtterance("Hello! I am paying attention.");
+              utterance.onend = () => {
+                 isSpeakingRef.current = false;
+                 // Start listening to their actual specific command automatically
+                 handleVoiceInput();
+              };
+              window.speechSynthesis.speak(utterance);
+           } else {
+              isSpeakingRef.current = false;
+              handleVoiceInput();
+           }
+           break; 
+        }
+      }
+    };
+
+    recognizer.onend = () => {
+       // Auto-loop the background listener if enabled
+       if (wakeWordEnabled && !isSpeakingRef.current && !isListening) {
+           try { recognizer.start(); } catch(e) {}
+       }
+    };
+
+    try {
+      recognizer.start();
+      wakeWordRecognizerRef.current = recognizer;
+    } catch(e) {}
+
+    return () => {
+      if (wakeWordRecognizerRef.current) {
+         wakeWordRecognizerRef.current.onend = null;
+         wakeWordRecognizerRef.current.stop();
+      }
+    };
+  }, [wakeWordEnabled, isListening]);
+  // ------------------------------------------
 
   const suggestions = [
     "What is your tech stack?",
@@ -29,7 +109,51 @@ const ChatbotWidget: React.FC<ChatbotWidgetProps> = ({ setActivePage }) => {
     scrollToBottom();
   }, [messages]);
 
-  const handleSend = async (overrideText?: string) => {
+  const speakText = (text: string) => {
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.cancel(); 
+      const cleanText = text.replace(/<NAVIGATE:.*?>/g, '').replace(/\*/g, '').trim();
+      if (!cleanText) return;
+      const utterance = new SpeechSynthesisUtterance(cleanText);
+      utterance.rate = 1.05;
+      
+      utterance.onstart = () => { isSpeakingRef.current = true; };
+      utterance.onend = () => { 
+        isSpeakingRef.current = false; 
+        // Restart wake word gently if it was previously enabled
+        if (wakeWordEnabled && wakeWordRecognizerRef.current) {
+           try { wakeWordRecognizerRef.current.start(); } catch(e) {}
+        }
+      };
+      
+      window.speechSynthesis.speak(utterance);
+    }
+  };
+
+  const handleVoiceInput = () => {
+    // @ts-expect-error: WebKit prefix
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRecognition) {
+      alert("Voice recognition is not supported in this browser.");
+      return;
+    }
+    const recognition = new SpeechRecognition();
+    recognition.continuous = false;
+    recognition.interimResults = false;
+    recognition.lang = 'en-US';
+
+    recognition.onstart = () => setIsListening(true);
+    recognition.onerror = () => setIsListening(false);
+    recognition.onend = () => setIsListening(false);
+    recognition.onresult = (event: any) => {
+      const transcript = event.results[0][0].transcript;
+      setInputVal(transcript);
+      handleSend(transcript, true);
+    };
+    recognition.start();
+  };
+
+  const handleSend = async (overrideText?: string, useVoiceResponse?: boolean) => {
     const textToSend = typeof overrideText === 'string' ? overrideText : inputVal;
     if (!textToSend.trim()) return;
     
@@ -115,6 +239,10 @@ const ChatbotWidget: React.FC<ChatbotWidgetProps> = ({ setActivePage }) => {
         }
       }
 
+      if (useVoiceResponse) {
+        speakText(botReply);
+      }
+
     } catch (error) {
       console.error('Chat API Error:', error);
       setMessages((prev) => [...prev, { sender: 'bot', text: "Sorry, I am currently offline or experienced an error." }]);
@@ -157,14 +285,38 @@ const ChatbotWidget: React.FC<ChatbotWidgetProps> = ({ setActivePage }) => {
             }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                 <div style={{ width: '10px', height: '10px', borderRadius: '50%', backgroundColor: '#00ff88', boxShadow: '0 0 10px #00ff88' }} />
-                <h4 style={{ margin: 0, color: 'var(--white-2)', fontSize: '15px' }}>Ask Dhyey's AI</h4>
+                <h4 style={{ margin: 0, color: 'var(--white-2)', fontSize: '15px' }}>Ask DJ</h4>
               </div>
-              <button 
-                onClick={() => setIsOpen(false)}
-                style={{ background: 'none', border: 'none', color: 'var(--light-gray)', cursor: 'pointer', fontSize: '20px' }}
-              >
-                &times;
-              </button>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                {/* Wake Word Toggle */}
+                <button 
+                  onClick={() => setWakeWordEnabled(!wakeWordEnabled)}
+                  title="Hands-free 'Hey DJ'"
+                  style={{
+                    background: wakeWordEnabled ? 'rgba(0, 255, 136, 0.15)' : 'transparent',
+                    border: wakeWordEnabled ? '1px solid #00ff88' : '1px solid var(--jet)',
+                    color: wakeWordEnabled ? '#00ff88' : 'var(--light-gray)',
+                    padding: '4px 8px',
+                    borderRadius: '10px',
+                    cursor: 'pointer',
+                    fontSize: '11px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '4px',
+                    transition: 'all 0.3s'
+                  }}
+                >
+                  {/*@ts-expect-error: custom*/}
+                  <ion-icon name={wakeWordEnabled ? "mic" : "mic-off-outline"}></ion-icon>
+                  Hey DJ
+                </button>
+                <button 
+                  onClick={() => setIsOpen(false)}
+                  style={{ background: 'none', border: 'none', color: 'var(--light-gray)', cursor: 'pointer', fontSize: '20px' }}
+                >
+                  &times;
+                </button>
+              </div>
             </div>
 
             {/* Chat Area */}
@@ -237,18 +389,41 @@ const ChatbotWidget: React.FC<ChatbotWidgetProps> = ({ setActivePage }) => {
                 value={inputVal}
                 onChange={(e) => setInputVal(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && handleSend()}
-                placeholder="Ask a question..."
+                placeholder={isListening ? "Listening..." : "Ask a question..."}
                 style={{
                   flex: 1,
-                  background: 'var(--smoky-black)',
-                  border: '1px solid var(--jet)',
+                  background: isListening ? 'rgba(0, 255, 136, 0.1)' : 'var(--smoky-black)',
+                  border: isListening ? '1px solid #00ff88' : '1px solid var(--jet)',
                   color: 'var(--white-2)',
                   padding: '10px 15px',
                   borderRadius: '20px',
                   outline: 'none',
-                  fontSize: '14px'
+                  fontSize: '14px',
+                  transition: 'all 0.3s ease'
                 }}
               />
+              {/* Mic Button */}
+              <button 
+                onClick={handleVoiceInput}
+                style={{
+                  width: '40px',
+                  height: '40px',
+                  borderRadius: '50%',
+                  background: isListening ? '#ff4757' : 'var(--jet)',
+                  border: 'none',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  color: 'var(--white-2)',
+                  boxShadow: isListening ? '0 0 15px rgba(255,71,87,0.5)' : 'none',
+                  transition: 'all 0.3s ease'
+                }}
+              >
+                {/*@ts-expect-error: custom element*/}
+                <ion-icon name={isListening ? "mic" : "mic-outline"}></ion-icon>
+              </button>
+              {/* Send Button */}
               <button 
                 onClick={() => handleSend()}
                 style={{

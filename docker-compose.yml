@@ -2,7 +2,11 @@ version: '3.8'
 
 services:
   frontend:
-    build: .
+    build:
+      context: .
+      args:
+        # Pulls the backend URL from the server's .env file, defaults to local dev mapping
+        - VITE_API_URL=${VITE_API_URL:-http://localhost:5001}
     ports:
       - "8080:80"
     depends_on:
@@ -13,9 +17,10 @@ services:
     ports:
       - "5001:5000"
     environment:
-      - MONGO_URI=mongodb://mongo:27017/portfolio
-      - JWT_SECRET=93d6bdc31d61effd93b8622d3987d5339ba5ee701b0f501f3d07577e2ba7caa0
-      - ADMIN_PASSWORD=dhyey@admin123
+      # Security Fix: Never hardcode passwords in docker-compose! Read them from a .env file on the deployment server
+      - MONGO_URI=${MONGO_URI:-mongodb://mongo:27017/portfolio}
+      - JWT_SECRET=${JWT_SECRET}
+      - ADMIN_PASSWORD=${ADMIN_PASSWORD}
       - PORT=5000
     depends_on:
       - mongo
