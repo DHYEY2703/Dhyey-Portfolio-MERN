@@ -78,7 +78,7 @@ const CustomCursor: React.FC = () => {
           width: '80px',
           height: '80px',
           borderRadius: '50%',
-          background: 'linear-gradient(135deg, var(--orange-yellow-crayola) 0%, hsla(35, 100%, 68%, 0.5) 100%)',
+          background: 'var(--text-gradient-yellow)',
           filter: 'blur(25px)',
           opacity: 0.6,
           pointerEvents: 'none',
@@ -99,9 +99,9 @@ const CustomCursor: React.FC = () => {
           height: '20px',
           borderRadius: '50%',
           pointerEvents: 'none',
-          zIndex: 9999,
-          mixBlendMode: 'difference'
+          zIndex: 9999
         }}
+        className="custom-cursor-ball"
       />
     </>
   );
