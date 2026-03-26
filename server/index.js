@@ -97,7 +97,7 @@ app.post('/api/chat', async (req, res) => {
 
 ## Response Guidelines
 - Always give complete, well-structured answers. Never cut off mid-sentence.
-- Keep responses 3-5 sentences long. Be informative but not excessively long.
+- Keep responses extremely punchy and concise (1-3 sentences). This ensures blazing fast reply latency.
 - Be enthusiastic and positive about Dhyey's work. Highlight his strengths naturally.
 - Use a friendly, professional tone — like a helpful colleague introducing you to Dhyey.
 - When asked about projects, describe them with specific technologies and features.
@@ -124,18 +124,36 @@ For example, if they ask to see your resume, reply: "Sure thing! Let me take you
     const chatSession = model.startChat({
       history: history,
       generationConfig: {
-        maxOutputTokens: 500,
+        maxOutputTokens: 250,
         temperature: 0.8,
       }
     });
 
-    const result = await chatSession.sendMessage(message);
-    const reply = result.response.text();
+    const result = await chatSession.sendMessageStream(message);
+
+    res.writeHead(200, {
+      'Content-Type': 'text/event-stream',
+      'Cache-Control': 'no-cache',
+      'Connection': 'keep-alive',
+    });
+
+    for await (const chunk of result.stream) {
+      if (chunk.text) {
+        const text = chunk.text();
+        res.write(`data: ${JSON.stringify({ text })}\n\n`);
+      }
+    }
     
-    res.json({ reply });
+    res.write('data: [DONE]\n\n');
+    res.end();
   } catch (error) {
-    console.error('Gemini API Error:', error.message);
-    res.status(500).json({ error: 'AI is temporarily unavailable.' });
+    console.error('Gemini API Error:', error.message || error);
+    // If headers already sent, we cannot res.status(500)
+    if (!res.headersSent) {
+      res.status(500).json({ error: 'AI is temporarily unavailable.' });
+    } else {
+      res.end();
+    }
   }
 });
 

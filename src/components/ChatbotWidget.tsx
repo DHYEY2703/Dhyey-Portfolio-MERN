@@ -11,7 +11,15 @@ const ChatbotWidget: React.FC<ChatbotWidgetProps> = ({ setActivePage }) => {
     { sender: 'bot', text: "Hi! I am Dhyey's AI Assistant. Ask me anything about his skills, projects, or experience!" }
   ]);
   const [inputVal, setInputVal] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  const suggestions = [
+    "What is your tech stack?",
+    "Tell me about the RMS ERP",
+    "Show me his resume",
+    "How can I contact Dhyey?"
+  ];
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -21,13 +29,15 @@ const ChatbotWidget: React.FC<ChatbotWidgetProps> = ({ setActivePage }) => {
     scrollToBottom();
   }, [messages]);
 
-  const handleSend = async () => {
-    if (!inputVal.trim()) return;
+  const handleSend = async (overrideText?: string) => {
+    const textToSend = typeof overrideText === 'string' ? overrideText : inputVal;
+    if (!textToSend.trim()) return;
     
     // Add user message
-    const newMessages = [...messages, { sender: 'user' as const, text: inputVal }];
+    const newMessages = [...messages, { sender: 'user' as const, text: textToSend }];
     setMessages(newMessages);
     setInputVal('');
+    setIsLoading(true);
 
     try {
       const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
@@ -35,35 +45,81 @@ const ChatbotWidget: React.FC<ChatbotWidgetProps> = ({ setActivePage }) => {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
-          message: inputVal,
-          // Pass history to maintain context
+          message: textToSend,
           conversationHistory: messages.slice(1) // exclude the first greeting message
         })
       });
 
-      if (!response.ok) throw new Error('Failed to fetch from OpenAI');
+      if (!response.ok) throw new Error('Failed to fetch from AI Server');
 
-      const data = await response.json();
-      let replyText = data.reply;
+      setIsLoading(false); // Stop bouncy dots instantly when we attach to the stream
+      
+      const reader = response.body?.getReader();
+      const decoder = new TextDecoder();
+      let botReply = '';
 
-      // Extract and execute Navigation commands
-      const navMatch = replyText.match(/<NAVIGATE:(about|resume|portfolio|blog|contact)>/i);
-      if (navMatch) {
-        const targetPage = navMatch[1].toLowerCase();
-        replyText = replyText.replace(navMatch[0], '').trim();
-        
-        if (setActivePage) {
-           // Small delay for dramatic effect after the message appears
-           setTimeout(() => {
-             setActivePage(targetPage);
-           }, 1500);
+      // Create the bot's empty message bubble to fill
+      setMessages((prev) => [...prev, { sender: 'bot', text: '' }]);
+
+      let readBuffer = '';
+      if (reader) {
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+          
+          readBuffer += decoder.decode(value, { stream: true });
+          
+          let eventEndIndex;
+          // Robust SSE Accumulator
+          while ((eventEndIndex = readBuffer.indexOf('\n\n')) >= 0) {
+            const chunk = readBuffer.slice(0, eventEndIndex);
+            readBuffer = readBuffer.slice(eventEndIndex + 2);
+            
+            const lines = chunk.split('\n');
+            for (const line of lines) {
+              if (line.startsWith('data: ')) {
+                const dataStr = line.substring(6).trim();
+                if (dataStr === '[DONE]') continue;
+                try {
+                  const parsed = JSON.parse(dataStr);
+                  botReply += parsed.text;
+                  
+                  // Instantly stream onto the screen!
+                  setMessages((prev) => {
+                    const updated = [...prev];
+                    updated[updated.length - 1] = { ...updated[updated.length - 1], text: botReply };
+                    return updated;
+                  });
+                } catch (e) {}
+              }
+            }
+          }
         }
       }
 
-      setMessages((prev) => [...prev, { sender: 'bot', text: replyText }]);
+      // After streaming completely finishes, check if AI triggered a skill
+      const navMatch = botReply.match(/<NAVIGATE:(about|resume|portfolio|blog|contact)>/i);
+      if (navMatch) {
+        const targetPage = navMatch[1].toLowerCase();
+        botReply = botReply.replace(navMatch[0], '').trim();
+        
+        // Strip the command from the UI
+        setMessages((prev) => {
+          const updated = [...prev];
+          updated[updated.length - 1] = { ...updated[updated.length - 1], text: botReply };
+          return updated;
+        });
+
+        if (setActivePage) {
+           setTimeout(() => setActivePage(targetPage), 1500);
+        }
+      }
+
     } catch (error) {
       console.error('Chat API Error:', error);
       setMessages((prev) => [...prev, { sender: 'bot', text: "Sorry, I am currently offline or experienced an error." }]);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -101,7 +157,7 @@ const ChatbotWidget: React.FC<ChatbotWidgetProps> = ({ setActivePage }) => {
             }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                 <div style={{ width: '10px', height: '10px', borderRadius: '50%', backgroundColor: '#00ff88', boxShadow: '0 0 10px #00ff88' }} />
-                <h4 style={{ margin: 0, color: 'var(--white-2)', fontSize: '15px' }}>Ask Dhyey AI</h4>
+                <h4 style={{ margin: 0, color: 'var(--white-2)', fontSize: '15px' }}>Ask Dhyey's AI</h4>
               </div>
               <button 
                 onClick={() => setIsOpen(false)}
@@ -127,6 +183,50 @@ const ChatbotWidget: React.FC<ChatbotWidgetProps> = ({ setActivePage }) => {
                   {m.text}
                 </div>
               ))}
+              
+              {messages.length === 1 && (
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginTop: '5px' }}>
+                  {suggestions.map((s, i) => (
+                    <button 
+                      key={i} 
+                      onClick={() => handleSend(s)}
+                      style={{
+                        background: 'var(--border-gradient-onyx)',
+                        border: '1px solid var(--jet)',
+                        color: 'var(--white-2)',
+                        padding: '6px 12px',
+                        borderRadius: '20px',
+                        fontSize: '12px',
+                        cursor: 'pointer',
+                        transition: 'background 0.3s'
+                      }}
+                      onMouseOver={(e) => (e.currentTarget.style.background = 'var(--bg-gradient-yellow-1)')}
+                      onMouseOut={(e) => (e.currentTarget.style.background = 'var(--border-gradient-onyx)')}
+                    >
+                      {s}
+                    </button>
+                  ))}
+                </div>
+              )}
+
+              {isLoading && (
+                <div style={{
+                  alignSelf: 'flex-start',
+                  backgroundColor: 'var(--onyx)',
+                  color: 'var(--light-gray)',
+                  padding: '10px 14px',
+                  borderRadius: '15px 15px 15px 0',
+                  fontSize: '14px',
+                  display: 'flex',
+                  gap: '4px',
+                  alignItems: 'center'
+                }}>
+                  <motion.div animate={{ y: [0, -5, 0] }} transition={{ repeat: Infinity, duration: 0.6, delay: 0 }} style={{ width: 6, height: 6, backgroundColor: 'var(--light-gray)', borderRadius: '50%' }} />
+                  <motion.div animate={{ y: [0, -5, 0] }} transition={{ repeat: Infinity, duration: 0.6, delay: 0.2 }} style={{ width: 6, height: 6, backgroundColor: 'var(--light-gray)', borderRadius: '50%' }} />
+                  <motion.div animate={{ y: [0, -5, 0] }} transition={{ repeat: Infinity, duration: 0.6, delay: 0.4 }} style={{ width: 6, height: 6, backgroundColor: 'var(--light-gray)', borderRadius: '50%' }} />
+                </div>
+              )}
+
               <div ref={messagesEndRef} />
             </div>
 
@@ -150,7 +250,7 @@ const ChatbotWidget: React.FC<ChatbotWidgetProps> = ({ setActivePage }) => {
                 }}
               />
               <button 
-                onClick={handleSend}
+                onClick={() => handleSend()}
                 style={{
                   width: '40px',
                   height: '40px',
