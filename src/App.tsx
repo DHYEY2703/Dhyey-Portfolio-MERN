@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import Sidebar from './components/Sidebar';
 import Navbar from './components/Navbar';
 import About from './pages/About';
@@ -9,7 +9,7 @@ import Contact from './pages/Contact';
 import Admin from './pages/Admin'; // Trigger TS server re-check
 
 import Background3D from './components/Background3D';
-import { Toaster } from 'react-hot-toast';
+import { Toaster, toast } from 'react-hot-toast';
 import { AnimatePresence, motion } from 'framer-motion';
 import CustomCursor from './components/CustomCursor';
 import FloatingContact from './components/FloatingContact';
@@ -23,7 +23,6 @@ function App() {
   const [showSplash, setShowSplash] = useState(true);
   const [activePage, setActivePage] = useState('about');
   const [theme, setTheme] = useState('dark');
-  const keysRef = useRef('');
 
   // Track Unique Visitor Session
   useEffect(() => {
@@ -46,6 +45,67 @@ function App() {
     setTimeout(trackVisitor, 2000); 
   }, []);
 
+  // --- EASTER EGG: Premium Fireworks & Custom Toast ---
+  const executeEasterEgg = () => {
+    // 1. Premium Fireworks Confetti
+    const duration = 5 * 1000;
+    const animationEnd = Date.now() + duration;
+    const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 99999 };
+
+    const randomInRange = (min: number, max: number) => Math.random() * (max - min) + min;
+
+    const interval: any = setInterval(function() {
+      const timeLeft = animationEnd - Date.now();
+
+      if (timeLeft <= 0) {
+        return clearInterval(interval);
+      }
+
+      const particleCount = 50 * (timeLeft / duration);
+      confetti({
+        ...defaults, particleCount,
+        origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 }
+      });
+      confetti({
+        ...defaults, particleCount,
+        origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 }
+      });
+    }, 250);
+
+    // 2. Play a premium success sound
+    try { soundManager.playClick(); } catch (e) {}
+
+    // 3. Luxurious Custom Toast Notification
+    toast.custom(() => (
+      <motion.div
+        initial={{ opacity: 0, y: -50, scale: 0.9 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        exit={{ opacity: 0, scale: 0.9, y: -20 }}
+        style={{
+          background: 'linear-gradient(135deg, rgba(30,30,30,0.95) 0%, rgba(15,15,15,0.98) 100%)',
+          backdropFilter: 'blur(12px)',
+          border: '1px solid rgba(255,165,0,0.4)', // Warm orange border
+          padding: '20px 30px',
+          borderRadius: '20px',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '20px',
+          boxShadow: '0 10px 40px rgba(255,165,0,0.15)'
+        }}
+      >
+        <div style={{ fontSize: '32px', filter: 'drop-shadow(0 0 10px rgba(255,165,0,0.8))' }}>💎</div>
+        <div>
+          <h4 style={{ margin: 0, color: 'var(--white-1)', fontSize: '18px', fontWeight: 600 }}>Secret Unlocked!</h4>
+          <p style={{ margin: '5px 0 0 0', color: 'var(--light-gray)', fontSize: '14px' }}>
+            You discovered the <span style={{color: 'var(--orange-yellow-crayola)'}}>Elite Visitor Badge</span>.
+          </p>
+        </div>
+      </motion.div>
+    ), { duration: 5000 });
+
+    localStorage.setItem('elite_visitor', 'true');
+  };
+
   // Listen to hash changes for Admin panel
   const [isAdmin, setIsAdmin] = useState(window.location.hash === '#admin');
 
@@ -64,23 +124,7 @@ function App() {
       window.removeEventListener('mousemove', startAmbientMusic);
     };
 
-    // Easter Egg Konami Code ('dhyey')
-    const handleKonami = (e: KeyboardEvent) => {
-      keysRef.current += e.key.toLowerCase();
-      if (keysRef.current.length > 10) keysRef.current = keysRef.current.slice(-10);
-      
-      if (keysRef.current.includes('dhyey')) {
-        soundManager.playClick();
-        confetti({
-          particleCount: 200,
-          spread: 100,
-          origin: { y: 0.5 },
-          colors: ['#fdbf5c', '#00ff88', '#ff0055', '#61dafb']
-        });
-        keysRef.current = '';
-      }
-    };
-    window.addEventListener('keydown', handleKonami);
+
 
     window.addEventListener('click', startAmbientMusic, { once: true });
     window.addEventListener('keydown', startAmbientMusic, { once: true });
@@ -120,7 +164,6 @@ function App() {
       window.removeEventListener('hashchange', handleHashChange);
       window.removeEventListener('mouseover', handleMouseOver);
       window.removeEventListener('click', handleClick);
-      window.removeEventListener('keydown', handleKonami);
       window.removeEventListener('click', startAmbientMusic);
       window.removeEventListener('keydown', startAmbientMusic);
       window.removeEventListener('touchstart', startAmbientMusic);
@@ -156,7 +199,24 @@ function App() {
       </Helmet>
       <CustomCursor />
       <Toaster position="top-right" />
-      <FloatingContact />
+      {!isAdmin && <FloatingContact />}
+
+      {/* EASTER EGG: The Secret Hidden Spot */}
+      <div 
+        onClick={executeEasterEgg}
+        title="???"
+        style={{
+          position: 'fixed',
+          bottom: '25px',
+          right: '85px',
+          width: '20px',
+          height: '20px',
+          opacity: 0.01, // Invisible
+          cursor: 'crosshair', // Tiny visual hint
+          zIndex: 9999,
+          borderRadius: '50%'
+        }}
+      />
       <ChatbotWidget setActivePage={setActivePage} />
       <AnimatePresence>
         {showSplash && <Loader onComplete={handleEnterExperience} />}
