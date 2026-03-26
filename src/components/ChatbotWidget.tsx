@@ -1,7 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-const ChatbotWidget: React.FC = () => {
+interface ChatbotWidgetProps {
+  setActivePage?: (page: string) => void;
+}
+
+const ChatbotWidget: React.FC<ChatbotWidgetProps> = ({ setActivePage }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<{sender: 'bot' | 'user', text: string}[]>([
     { sender: 'bot', text: "Hi! I am Dhyey's AI Assistant. Ask me anything about his skills, projects, or experience!" }
@@ -40,7 +44,23 @@ const ChatbotWidget: React.FC = () => {
       if (!response.ok) throw new Error('Failed to fetch from OpenAI');
 
       const data = await response.json();
-      setMessages((prev) => [...prev, { sender: 'bot', text: data.reply }]);
+      let replyText = data.reply;
+
+      // Extract and execute Navigation commands
+      const navMatch = replyText.match(/<NAVIGATE:(about|resume|portfolio|blog|contact)>/i);
+      if (navMatch) {
+        const targetPage = navMatch[1].toLowerCase();
+        replyText = replyText.replace(navMatch[0], '').trim();
+        
+        if (setActivePage) {
+           // Small delay for dramatic effect after the message appears
+           setTimeout(() => {
+             setActivePage(targetPage);
+           }, 1500);
+        }
+      }
+
+      setMessages((prev) => [...prev, { sender: 'bot', text: replyText }]);
     } catch (error) {
       console.error('Chat API Error:', error);
       setMessages((prev) => [...prev, { sender: 'bot', text: "Sorry, I am currently offline or experienced an error." }]);

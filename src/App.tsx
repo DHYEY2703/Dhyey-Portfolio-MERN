@@ -157,7 +157,7 @@ function App() {
       <CustomCursor />
       <Toaster position="top-right" />
       <FloatingContact />
-      <ChatbotWidget />
+      <ChatbotWidget setActivePage={setActivePage} />
       <AnimatePresence>
         {showSplash && <Loader onComplete={handleEnterExperience} />}
       </AnimatePresence>
