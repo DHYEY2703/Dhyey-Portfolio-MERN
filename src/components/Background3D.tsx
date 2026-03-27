@@ -5,40 +5,47 @@ import { Points, PointMaterial } from '@react-three/drei';
 import * as random from 'maath/random/dist/maath-random.esm';
 
 function Stars({ theme, ...props }: any) {
-  const ref = useRef<any>(null);
+  // Creating 3 independent 3D mathematical clustered layers!
+  const ref1 = useRef<any>(null); // Layer 1: Background Infinite Deep Space (Tiny, faint)
+  const ref2 = useRef<any>(null); // Layer 2: Milky Way Dust Mist (Larger, glowing blue/purple tint)
+  const ref3 = useRef<any>(null); // Layer 3: Foreground Brilliant Stars (Sharp, bright white)
   
-  // Increased particle count and radius for a much deeper, fuller universe
-  const [sphere] = useState(() => random.inSphere(new Float32Array(8000), { radius: 3 }));
+  const [sphere1] = useState(() => random.inSphere(new Float32Array(5000), { radius: 3.5 })); 
+  const [sphere2] = useState(() => random.inSphere(new Float32Array(8000), { radius: 2.5 })); 
+  const [sphere3] = useState(() => random.inSphere(new Float32Array(2000), { radius: 1.5 })); 
 
   useFrame((state, delta) => {
-    if (ref.current) {
-      // Base continuous slow rotation
-      ref.current.rotation.x -= delta / 30;
-      ref.current.rotation.y -= delta / 40;
-      
-      // Interactive Parallax - The universe subtly shifts when you move your mouse!
-      const targetX = state.pointer.x * 0.2;
-      const targetY = state.pointer.y * 0.2;
-      
-      ref.current.position.x += (targetX - ref.current.position.x) * 0.1;
-      ref.current.position.y += (targetY - ref.current.position.y) * 0.1;
-    }
+    // Ultra-calm, divergent rotational speeds simulating real planetary motion
+    if (ref1.current) ref1.current.rotation.x -= delta / 150;
+    if (ref2.current) ref2.current.rotation.y -= delta / 100;
+    if (ref3.current) ref3.current.rotation.x -= delta / 50;
+    
+    // Mapped subtle parallax engine
+    const targetX = state.pointer.x * 0.1;
+    const targetY = state.pointer.y * 0.1;
+    
+    if (ref1.current) ref1.current.position.x += (targetX - ref1.current.position.x) * 0.05;
+    if (ref2.current) ref2.current.position.y += (targetY - ref2.current.position.y) * 0.05;
   });
 
-  // Perfectly matches the warm terracotta in light mode, and golden yellow in dark mode
-  const particleColor = theme === 'light' ? '#d96c4e' : '#fdbf5c';
+  const baseTheme = theme === 'light' ? '#ff9966' : '#ffffff';
+  const twilightMist = theme === 'light' ? '#ffcc99' : '#88ccff'; // Gives the night sky that rich photographic ice-blue nebulous tint
 
   return (
     <group rotation={[0, 0, Math.PI / 4]}>
-      <Points ref={ref} positions={sphere as Float32Array} stride={3} frustumCulled={false} {...props}>
-        <PointMaterial 
-          transparent 
-          color={particleColor} 
-          size={0.006} 
-          sizeAttenuation={true} 
-          depthWrite={false} 
-          opacity={theme === 'light' ? 0.4 : 0.8}
-        />
+      {/* Math Layer 1: Massive spread of faintly visible deep-space background dots */}
+      <Points ref={ref1} positions={sphere1 as Float32Array} stride={3} frustumCulled={false} {...props}>
+        <PointMaterial transparent color={baseTheme} size={0.002} sizeAttenuation={true} depthWrite={false} opacity={0.3} />
+      </Points>
+      
+      {/* Math Layer 2: Thick, soft, ice-blue glowing dust forming the Milky Way clouds */}
+      <Points ref={ref2} positions={sphere2 as Float32Array} stride={3} frustumCulled={false} {...props}>
+        <PointMaterial transparent color={twilightMist} size={0.008} sizeAttenuation={true} depthWrite={false} opacity={0.15} />
+      </Points>
+
+      {/* Math Layer 3: Intensely bright, extremely sharp foreground constellation stars */}
+      <Points ref={ref3} positions={sphere3 as Float32Array} stride={3} frustumCulled={false} {...props}>
+        <PointMaterial transparent color={baseTheme} size={0.006} sizeAttenuation={true} depthWrite={false} opacity={0.9} />
       </Points>
     </group>
   );
@@ -46,10 +53,31 @@ function Stars({ theme, ...props }: any) {
 
 const Background3D: React.FC<{ theme: string }> = ({ theme }) => {
   return (
-    <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', zIndex: -1, pointerEvents: 'none' }}>
+    <div className={`perfect-sky-bg theme-${theme}`} style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', zIndex: -1, pointerEvents: 'none', overflow: 'hidden' }}>
+      
+      {/* 🌌 THREE.JS Volumetric Layered Starfield */}
       <Canvas camera={{ position: [0, 0, 1] }}>
         <Stars theme={theme} />
       </Canvas>
+
+      {/* Pure CSS Photographic Gradient Compositions */}
+      <style>{`
+        /* 🌲 Dark Mode & Cyberpunk: Mathematically Constructed Galactic Clouds */
+        .perfect-sky-bg.theme-dark,
+        .perfect-sky-bg.theme-cyberpunk {
+          background-color: #020306;
+          /* Generating the exact nebula gas cloud photography from the PNG purely in code! */
+          background-image: 
+            radial-gradient(ellipse at 50% 120%, rgba(20, 50, 120, 0.4) 0%, transparent 60%),
+            radial-gradient(ellipse at 80% 20%, rgba(60, 20, 100, 0.3) 0%, transparent 50%),
+            radial-gradient(ellipse at -20% 50%, rgba(10, 60, 80, 0.2) 0%, transparent 40%);
+        }
+
+        /* 🌅 Light Mode: Beautiful Golden Dawn Sunrise Transition */
+        .perfect-sky-bg.theme-light {
+          background: radial-gradient(ellipse at top, #ffe4d6 0%, #ffecd2 100%);
+        }
+      `}</style>
     </div>
   );
 };

@@ -167,11 +167,13 @@ body { background: var(--smoky-black); }
 
 .sidebar,
 article {
-  background: var(--eerie-black-2);
-  border: 1px solid var(--jet);
-  border-radius: 20px;
+  background: var(--glass-panel-bg, rgba(20, 20, 25, 0.45));
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid var(--glass-border, rgba(255, 255, 255, 0.08));
+  border-radius: 28px; /* Slightly smoother corners for premium feel */
   padding: 15px;
-  box-shadow: var(--shadow-1);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
   z-index: 1;
 }
 
@@ -274,22 +276,20 @@ article.active {
 
 .content-card {
   position: relative;
-  background: var(--border-gradient-onyx);
+  background: var(--glass-card-bg, rgba(255, 255, 255, 0.03));
+  backdrop-filter: blur(15px);
+  border: 1px solid var(--glass-border, rgba(255, 255, 255, 0.05));
   padding: 15px;
   padding-top: 45px;
   border-radius: 14px;
-  box-shadow: var(--shadow-2);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
   cursor: pointer;
   z-index: 1;
 }
 
+/* Removed completely so the frosted glass isn't blocked by inner solid gradients */
 .content-card::before {
-  content: "";
-  position: absolute;
-  inset: 1px;
-  background: var(--bg-gradient-jet);
-  border-radius: inherit;
-  z-index: -1;
+  display: none;
 }
 
 
@@ -463,11 +463,12 @@ main {
   bottom: 0;
   left: 0;
   width: 100%;
-  background: hsla(240, 1%, 17%, 0.75);
-  backdrop-filter: blur(10px);
-  border: 1px solid var(--jet);
-  border-radius: 12px 12px 0 0;
-  box-shadow: var(--shadow-2);
+  background: var(--glass-nav-bg, rgba(25, 25, 30, 0.65));
+  backdrop-filter: blur(25px);
+  -webkit-backdrop-filter: blur(25px);
+  border: 1px solid var(--glass-border, rgba(255, 255, 255, 0.05));
+  border-radius: 24px 24px 0 0;
+  box-shadow: 0 -8px 32px 0 rgba(0, 0, 0, 0.2);
   z-index: 5;
 }
 
@@ -528,20 +529,18 @@ main {
 
 .service-item {
   position: relative;
-  background: var(--border-gradient-onyx);
+  background: var(--glass-card-bg, rgba(255, 255, 255, 0.02));
+  backdrop-filter: blur(15px);
+  border: 1px solid var(--glass-border, rgba(255, 255, 255, 0.06));
   padding: 20px;
   border-radius: 14px;
-  box-shadow: var(--shadow-2);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.15);
   z-index: 1;
 }
 
+/* Removed to prevent clipping the frosting blur */
 .service-item::before {
-  content: "";
-  position: absolute;
-  inset: 1px;
-  background: var(--bg-gradient-jet);
-  border-radius: inherit;
-  z-index: -1;
+  display: none;
 }
 
 .service-icon-box { margin-bottom: 10px; }
@@ -1920,6 +1919,23 @@ textarea.form-input::-webkit-resizer { display: none; }
   background: var(--eerie-black-2);
   border: 1px solid var(--jet);
   box-shadow: var(--shadow-2);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+/* Disable Glassmorphism overlay for Light Mode */
+:root[data-theme="light"] .sidebar,
+:root[data-theme="light"] article {
+  background: var(--eerie-black-2);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+:root[data-theme="light"] .content-card,
+:root[data-theme="light"] .service-item {
+  background: var(--border-gradient-onyx);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
 }
 
 /* Notebook dot-grid background pattern */
