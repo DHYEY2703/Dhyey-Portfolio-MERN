@@ -1971,3 +1971,60 @@ textarea.form-input::-webkit-resizer { display: none; }
   border-color: var(--orange-yellow-crayola);
   box-shadow: 0 0 0 3px rgba(217, 108, 78, 0.15);
 }
+
+/* ===== CYBERPUNK THEME ===== */
+:root[data-theme="cyberpunk"] {
+  --bg-gradient-onyx: linear-gradient(to bottom right, #09090b 3%, #18051e 97%);
+  --bg-gradient-jet: linear-gradient(to bottom right, rgba(200,0,255, 0.1) 0%, rgba(0, 255, 136, 0.05) 100%), #0a0a0a;
+  
+  --jet: #121212;
+  --onyx: #1a1a2e;
+  --eerie-black-1: #0f0c29;
+  --eerie-black-2: #14142b;
+  --smoky-black: #020205;
+  --white-1: #00ffcc;
+  --white-2: #e0e0ff;
+  --orange-yellow-crayola: #ff0055;
+  --vegas-gold: #b300ff;
+  --light-gray: #a8a8b3;
+  --light-gray-70: hsla(240, 5%, 65%, 0.7);
+  --bittersweet-shimmer: #00ff88;
+  
+  --shadow-1: -4px 8px 24px rgba(0, 255, 204, 0.15);
+  --shadow-2: 0 16px 30px rgba(255, 0, 85, 0.15);
+  --shadow-3: 0 16px 40px rgba(179, 0, 255, 0.2);
+  --shadow-4: 0 25px 50px rgba(0, 255, 136, 0.15);
+  --shadow-5: 0 24px 80px rgba(0, 0, 0, 0.8);
+}
+
+:root[data-theme="cyberpunk"] body {
+  background-color: var(--smoky-black);
+  color: var(--light-gray);
+}
+
+:root[data-theme="cyberpunk"] .sidebar,
+:root[data-theme="cyberpunk"] .article {
+  background: rgba(15, 12, 41, 0.8);
+  border: 1px solid rgba(0, 255, 204, 0.3);
+  box-shadow: 0 0 20px rgba(179, 0, 255, 0.1) inset;
+}
+
+:root[data-theme="cyberpunk"] .h2, 
+:root[data-theme="cyberpunk"] .h3, 
+:root[data-theme="cyberpunk"] .h4 {
+  color: #fff;
+  text-shadow: 0 0 8px rgba(0, 255, 204, 0.5);
+}
+
+:root[data-theme="cyberpunk"] .form-btn {
+  background: transparent;
+  border: 2px solid #00ffcc;
+  color: #00ffcc;
+  box-shadow: 0 0 15px rgba(0,255,204,0.3);
+  text-shadow: 0 0 5px rgba(0, 255, 204, 0.8);
+}
+
+:root[data-theme="cyberpunk"] .form-btn:hover {
+  background: rgba(0, 255, 204, 0.2);
+  transform: translateY(-2px);
+}

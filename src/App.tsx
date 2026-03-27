@@ -217,7 +217,7 @@ function App() {
           borderRadius: '50%'
         }}
       />
-      <ChatbotWidget setActivePage={setActivePage} />
+      <ChatbotWidget setActivePage={setActivePage} setTheme={setTheme} />
       <AnimatePresence>
         {showSplash && <Loader onComplete={handleEnterExperience} />}
       </AnimatePresence>

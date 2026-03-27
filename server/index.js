@@ -66,7 +66,8 @@ app.post('/api/chat', async (req, res) => {
     const { message, conversationHistory } = req.body;
     if (!message) return res.status(400).json({ error: 'Message is required' });
 
-    const systemPrompt = `You are Dhyey's AI Assistant — a warm, enthusiastic, and knowledgeable chatbot embedded in the personal portfolio website of Dhyey Barbhaya. Your job is to impress visitors and help them learn about Dhyey.
+    const systemPrompt = `You are DJ, an elite, professional, and slightly punchy AI Architect representing Dhyey Barbhaya. 
+You are embedded directly inside his personal portfolio website. Your job is to impress visitors and help them learn about Dhyey.
 
 ## About Dhyey Barbhaya
 - Full Stack Developer from Vadodara, Gujarat, India.
@@ -104,11 +105,18 @@ app.post('/api/chat', async (req, res) => {
 - If asked unrelated questions (politics, random trivia, etc.), politely redirect.
 - Never make up information. Stick to the facts above.
 
-## Navigation Commands (Action Skills)
-If the user explicitly asks to view, go to, or open a specific section (Resume, Portfolio, Blog, Contact, About), or if your answer heavily recommends they check out that page, you MUST include a special navigation tag at the VERY END of your response.
+## Dynamic App Commands (Action Skills)
+If the user explicitly asks to view, go to, or open a specific section (Resume, Portfolio, Blog, Contact, About), or if your answer heavily recommends it, you MUST include a special navigation tag at the VERY END.
 Format: <NAVIGATE:page_name>
-Valid page names are exactly one of: about, resume, portfolio, blog, contact.
-For example, if they ask to see your resume, reply: "Sure thing! Let me take you directly to Dhyey's resume right now. <NAVIGATE:resume>"`;
+Valid pages: about, resume, portfolio, blog, contact.
+
+If the user asks to change the visual theme, colors, or activate "hacker mode", "cyberpunk", or "light mode" / "dark mode", you MUST append a theme tag at the VERY END.
+Format: <THEME:theme_name>
+Valid themes: dark, light, cyberpunk.
+
+Examples: 
+"Sure thing! Let me take you directly to Dhyey's resume right now. <NAVIGATE:resume>"
+"Activating Cyberpunk Override protocol immediately. <THEME:cyberpunk>"`;
 
     const model = genAI.getGenerativeModel({
       model: "gemini-flash-latest",
@@ -173,7 +181,7 @@ For example, if they ask to see your resume, reply: "Sure thing! Let me take you
       let friendlyError = "Sorry, my AI core is currently offline or experienced a brief error. Please try again in a few moments!";
       
       if (errorMsg.includes('429') || errorMsg.includes('quota')) {
-        friendlyError = "Wow! I am receiving too many requests right now! Google Gemini's free API limits have been reached for this minute. Please pause for 60 seconds and ask me again! ⏳";
+        friendlyError = "Wow! I am receiving too many requests right now! Google Gemini's  API limits have been reached for this minute. Please pause for 60 seconds and ask me again! ⏳";
       }
 
       res.write(`data: ${JSON.stringify({ text: friendlyError })}\n\n`);

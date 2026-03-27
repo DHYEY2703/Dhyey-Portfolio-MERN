@@ -3,9 +3,10 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 interface ChatbotWidgetProps {
   setActivePage?: (page: string) => void;
+  setTheme?: (theme: string) => void;
 }
 
-const ChatbotWidget: React.FC<ChatbotWidgetProps> = ({ setActivePage }) => {
+const ChatbotWidget: React.FC<ChatbotWidgetProps> = ({ setActivePage, setTheme }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<{sender: 'bot' | 'user', text: string}[]>([
     { sender: 'bot', text: "Hi! I am Dhyey's AI Assistant. Ask me anything about his skills, projects, or experience!" }
@@ -256,7 +257,22 @@ const ChatbotWidget: React.FC<ChatbotWidgetProps> = ({ setActivePage }) => {
         }
       }
 
-      // After streaming completely finishes, check if AI triggered a skill
+      // After streaming Theme Check
+      const themeMatch = botReply.match(/<THEME:(dark|light|cyberpunk)>/i);
+      if (themeMatch) {
+         const targetTheme = themeMatch[1].toLowerCase();
+         botReply = botReply.replace(themeMatch[0], '').trim();
+         
+         setMessages((prev) => {
+            const updated = [...prev];
+            updated[updated.length - 1] = { ...updated[updated.length - 1], text: botReply };
+            return updated;
+         });
+         
+         if (setTheme) setTheme(targetTheme);
+      }
+
+      // After streaming Nav Check
       const navMatch = botReply.match(/<NAVIGATE:(about|resume|portfolio|blog|contact)>/i);
       if (navMatch) {
         const targetPage = navMatch[1].toLowerCase();
