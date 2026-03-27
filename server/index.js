@@ -115,11 +115,23 @@ For example, if they ask to see your resume, reply: "Sure thing! Let me take you
       systemInstruction: systemPrompt
     });
 
-    // Map conversation history format if passed from frontend
-    const history = (conversationHistory || []).map(msg => ({
-      role: msg.sender === 'user' ? 'user' : 'model',
-      parts: [{ text: msg.text }]
-    }));
+    // Map conversation history safely to guarantee strictly alternating roles for Gemini
+    const history = [];
+    (conversationHistory || []).forEach(msg => {
+      if (!msg.text || !msg.text.trim()) return; // Skip empty UI placeholders
+      
+      const role = msg.sender === 'user' ? 'user' : 'model';
+      
+      if (history.length > 0 && history[history.length - 1].role === role) {
+        // If two 'user' or 'model' messages stack up, gracefully merge them!
+        history[history.length - 1].parts[0].text += `\n\n${msg.text}`;
+      } else {
+        history.push({
+          role: role,
+          parts: [{ text: msg.text }]
+        });
+      }
+    });
 
     const chatSession = model.startChat({
       history: history,
@@ -147,10 +159,26 @@ For example, if they ask to see your resume, reply: "Sure thing! Let me take you
     res.write('data: [DONE]\n\n');
     res.end();
   } catch (error) {
-    console.error('Gemini API Error:', error.message || error);
-    // If headers already sent, we cannot res.status(500)
+    const errorMsg = error?.message || String(error);
+    console.error('Gemini API Error:', errorMsg);
+    
+    // We must send UI-friendly error streams instead of crashing the fetch
     if (!res.headersSent) {
-      res.status(500).json({ error: 'AI is temporarily unavailable.' });
+      res.writeHead(200, {
+        'Content-Type': 'text/event-stream',
+        'Cache-Control': 'no-cache',
+        'Connection': 'keep-alive',
+      });
+      
+      let friendlyError = "Sorry, my AI core is currently offline or experienced a brief error. Please try again in a few moments!";
+      
+      if (errorMsg.includes('429') || errorMsg.includes('quota')) {
+        friendlyError = "Wow! I am receiving too many requests right now! Google Gemini's free API limits have been reached for this minute. Please pause for 60 seconds and ask me again! ⏳";
+      }
+
+      res.write(`data: ${JSON.stringify({ text: friendlyError })}\n\n`);
+      res.write('data: [DONE]\n\n');
+      res.end();
     } else {
       res.end();
     }

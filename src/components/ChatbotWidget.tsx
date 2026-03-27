@@ -19,6 +19,7 @@ const ChatbotWidget: React.FC<ChatbotWidgetProps> = ({ setActivePage }) => {
   const isSpeakingRef = useRef(false);
   const wakeWordRecognizerRef = useRef<any>(null);
   const commandLockRef = useRef(false);
+  const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
 
   // --- WAKE WORD: ALWAYS LISTENING ENGINE ---
   useEffect(() => {
@@ -51,9 +52,19 @@ const ChatbotWidget: React.FC<ChatbotWidgetProps> = ({ setActivePage }) => {
       const latestPhrase = event.results[event.results.length - 1][0].transcript.toLowerCase().trim();
       if (!latestPhrase) return;
 
-      // 1. If we're already waiting for their question (Mic is glowing green)
+      // 1. If we're currently in a Continuous Conversation (Mic is glowing green)
       if (commandLockRef.current) {
-        commandLockRef.current = false; // lock released
+        if (['stop', 'close', 'goodbye', 'bye', 'exit'].includes(latestPhrase)) {
+           commandLockRef.current = false;
+           setIsListening(false);
+           setIsOpen(false);
+           if ('speechSynthesis' in window) {
+              window.speechSynthesis.speak(new SpeechSynthesisUtterance("Goodbye. I will go back to sleep."));
+           }
+           return;
+        }
+
+        commandLockRef.current = false; // lock released while we wait for backend 
         setIsListening(false); // mic stops glowing
         setInputVal(latestPhrase);
         handleSend(latestPhrase, true);
@@ -114,17 +125,26 @@ const ChatbotWidget: React.FC<ChatbotWidgetProps> = ({ setActivePage }) => {
     scrollToBottom();
   }, [messages]);
 
-  const speakText = (text: string) => {
+  const speakText = (text: string, keepListening = false) => {
     if ('speechSynthesis' in window) {
       window.speechSynthesis.cancel(); 
       const cleanText = text.replace(/<NAVIGATE:.*?>/g, '').replace(/\*/g, '').trim();
       if (!cleanText) return;
+      
       const utterance = new SpeechSynthesisUtterance(cleanText);
+      utteranceRef.current = utterance; // Prevent Chrome Garbage Collection Bug
+      
       utterance.rate = 1.05;
+      
+      console.log('🤖 DJ is speaking:', cleanText);
       
       utterance.onstart = () => { isSpeakingRef.current = true; };
       utterance.onend = () => { 
         isSpeakingRef.current = false; 
+        if (keepListening) {
+           commandLockRef.current = true;
+           setIsListening(true);
+        }
       };
       
       window.speechSynthesis.speak(utterance);
@@ -162,6 +182,8 @@ const ChatbotWidget: React.FC<ChatbotWidgetProps> = ({ setActivePage }) => {
   };
 
   async function handleSend(overrideText?: string, useVoiceResponse?: boolean) {
+    if (isLoading) return; // Prevent simultaneous spam causing API 429 crash
+    
     const textToSend = typeof overrideText === 'string' ? overrideText : inputVal;
     if (!textToSend.trim()) return;
     
@@ -170,6 +192,11 @@ const ChatbotWidget: React.FC<ChatbotWidgetProps> = ({ setActivePage }) => {
     setMessages(newMessages);
     setInputVal('');
     setIsLoading(true);
+
+    // Keep Audio Context Warmed up through the long HTTP request delay
+    if (useVoiceResponse && 'speechSynthesis' in window) {
+      window.speechSynthesis.speak(new SpeechSynthesisUtterance(''));
+    }
 
     try {
       const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
@@ -248,7 +275,7 @@ const ChatbotWidget: React.FC<ChatbotWidgetProps> = ({ setActivePage }) => {
       }
 
       if (useVoiceResponse) {
-        speakText(botReply);
+        speakText(botReply, true); // Keep conversation loop going automatically!
       }
 
     } catch (error) {
