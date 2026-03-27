@@ -65,6 +65,36 @@ const ChatbotWidget: React.FC<ChatbotWidgetProps> = ({ setActivePage, setTheme }
            return;
         }
 
+        // ⚡ INSTANT VOICE NAVIGATION INTERCEPTOR (No AI delay!)
+        const navMap: Record<string, string> = {
+          'resume': 'resume', 'show resume': 'resume', 'open resume': 'resume', 'go to resume': 'resume', 'show me resume': 'resume', 'show me his resume': 'resume',
+          'projects': 'portfolio', 'show projects': 'portfolio', 'portfolio': 'portfolio', 'show me projects': 'portfolio', 'go to projects': 'portfolio', 'open portfolio': 'portfolio', 'show me his projects': 'portfolio',
+          'contact': 'contact', 'contact page': 'contact', 'show contact': 'contact', 'go to contact': 'contact', 'how to contact': 'contact', 'open contact': 'contact',
+          'about': 'about', 'about page': 'about', 'show about': 'about', 'go to about': 'about', 'tell me about him': 'about', 'who is dhyey': 'about',
+          'blog': 'blog', 'show blog': 'blog', 'go to blog': 'blog', 'open blog': 'blog',
+        };
+        const themeMap: Record<string, string> = {
+          'dark mode': 'dark', 'light mode': 'light', 'cyberpunk': 'cyberpunk', 'cyberpunk mode': 'cyberpunk', 'hacker mode': 'cyberpunk', 'normal mode': 'dark',
+        };
+
+        // Check for instant navigation match
+        const navTarget = navMap[latestPhrase];
+        if (navTarget && setActivePage) {
+          setActivePage(navTarget);
+          const pageNames: Record<string, string> = { resume: 'Resume', portfolio: 'Projects', contact: 'Contact', about: 'About', blog: 'Blog' };
+          speakText(`Taking you to the ${pageNames[navTarget]} page right now.`, true);
+          return;
+        }
+
+        // Check for instant theme match
+        const themeTarget = themeMap[latestPhrase];
+        if (themeTarget && setTheme) {
+          setTheme(themeTarget);
+          speakText(`Switching to ${themeTarget} mode.`, true);
+          return;
+        }
+
+        // No instant match = fall through to Gemini AI
         commandLockRef.current = false; // lock released while we wait for backend 
         setIsListening(false); // mic stops glowing
         setInputVal(latestPhrase);
