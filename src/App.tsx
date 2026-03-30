@@ -17,6 +17,7 @@ import Loader from './components/Loader';
 import { soundManager } from './utils/SoundManager';
 import ChatbotWidget from './components/ChatbotWidget';
 import CommandPalette from './components/CommandPalette';
+import BreakoutGame from './components/BreakoutGame';
 import confetti from 'canvas-confetti';
 import { Helmet } from 'react-helmet-async';
 
@@ -24,6 +25,7 @@ function App() {
   const [showSplash, setShowSplash] = useState(true);
   const [activePage, setActivePage] = useState('about');
   const [theme, setTheme] = useState('dark');
+  const [gameActive, setGameActive] = useState(false);
 
   // Track Unique Visitor Session
   useEffect(() => {
@@ -200,7 +202,11 @@ function App() {
       </Helmet>
       <CustomCursor />
       <Toaster position="top-right" />
-      <CommandPalette setActivePage={setActivePage} setTheme={setTheme} />
+      <CommandPalette setActivePage={setActivePage} setTheme={setTheme} setGameActive={setGameActive} />
+      
+      {/* 🎮 Destructive Physics Engine Overlay */}
+      {gameActive && <BreakoutGame onClose={() => setGameActive(false)} />}
+
       {!isAdmin && <FloatingContact />}
 
       {/* EASTER EGG: The Secret Hidden Spot */}

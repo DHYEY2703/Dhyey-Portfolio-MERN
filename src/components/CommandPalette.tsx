@@ -11,8 +11,9 @@ interface Command {
 
 const CommandPalette: React.FC<{
   setActivePage: React.Dispatch<React.SetStateAction<string>>,
-  setTheme: React.Dispatch<React.SetStateAction<string>>
-}> = ({ setActivePage, setTheme }) => {
+  setTheme: React.Dispatch<React.SetStateAction<string>>,
+  setGameActive: React.Dispatch<React.SetStateAction<boolean>>
+}> = ({ setActivePage, setTheme, setGameActive }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [query, setQuery] = useState('');
   const inputRef = useRef<HTMLInputElement>(null);
@@ -28,6 +29,11 @@ const CommandPalette: React.FC<{
     setIsOpen(false);
   };
 
+  const executeDestruction = () => {
+    setIsOpen(false);
+    setGameActive(true);
+  };
+
   const commands: Command[] = [
     { id: '1', name: 'Navigate: About', icon: 'person-outline', action: () => { setActivePage('about'); setIsOpen(false); } },
     { id: '2', name: 'Navigate: Resume', icon: 'document-text-outline', action: () => { setActivePage('resume'); setIsOpen(false); } },
@@ -37,6 +43,7 @@ const CommandPalette: React.FC<{
     { id: '6', name: 'System: Toggle Light/Dark Mode', icon: 'contrast-outline', action: () => { toggleTheme(); setIsOpen(false); } },
     { id: '7', name: 'System: Activate Cyberpunk Protocol', icon: 'terminal-outline', action: () => { toggleCyberpunk(); setIsOpen(false); } },
     { id: '8', name: 'Action: Download Resume (PDF)', icon: 'download-outline', action: triggerDownload },
+    { id: '9', name: 'Action: Execute Destruction Protocol (Play)', icon: 'game-controller-outline', action: executeDestruction },
   ];
 
   const filteredCommands = query === '' 
