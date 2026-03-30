@@ -9,26 +9,26 @@ const About: React.FC = () => {
     {
       name: 'Rishav Desai',
       avatar: '/assets/images/avatar-1.png',
-      date: '14 June, 2021',
-      text: `"Dhyey did an outstanding job creating our corporate identity. He listened carefully to our ideas and transformed them into a design that truly reflects our brand. His creativity and attention to detail were exceptional, and the final result exceeded our expectations. We couldn't be happier with his work and would recommend him without hesitation."`
+      date: '22 March, 2025',
+      text: `"Dhyey built our internal ERP dashboard from scratch, and the result was incredible. He architected the entire backend API, integrated real-time WebSocket notifications, and delivered a React frontend that our team actually enjoys using. His full-stack expertise is the real deal — highly recommended."`
     },
     {
       name: 'Kashish Dhulia',
       avatar: '/assets/images/avatar-2.png',
-      date: '14 June, 2021',
-      text: `"Working with Dhyey was an absolute pleasure. He took the time to understand our vision and provided a corporate identity that perfectly aligns with our brand values. Dhyey was always responsive, professional, and easy to work with, ensuring the project ran smoothly. We're thrilled with the final design and highly recommend his services."`
+      date: '08 January, 2025',
+      text: `"Working with Dhyey on our AI-powered sales forecasting tool was an absolute pleasure. He seamlessly integrated machine learning models with a clean Node.js API and a beautiful React dashboard. His ability to bridge AI and web development is rare and incredibly valuable."`
     },
     {
       name: 'Poonam Makhija',
       avatar: '/assets/images/avatar-3.png',
-      date: '14 June, 2021',
-      text: `"We are incredibly impressed with the corporate identity that Dhyey created for us. His process was seamless, and he really understood the essence of our brand. Dhyey’s design captured our vision beautifully and helped elevate our image in the market. We’re extremely satisfied with his work and look forward to working with him again."`
+      date: '15 November, 2024',
+      text: `"Dhyey delivered a fully Dockerized attendance management platform for our organization. From MongoDB schema design to Nginx deployment configs, he handled every layer of the stack with confidence. The system has been running flawlessly in production for months."`
     },
     {
       name: 'Devanshu Jain',
       avatar: '/assets/images/avatar-4.png',
-      date: '14 June, 2021',
-      text: `"Dhyey exceeded our expectations in every way. He took the time to understand our goals and provided us with a corporate identity that is both creative and professional. His attention to detail and commitment to delivering the best design was evident throughout the process. We are delighted with the final result and highly recommend him to anyone looking for top-tier design work."`
+      date: '03 August, 2024',
+      text: `"Dhyey's attention to detail is exceptional. He redesigned our e-commerce backend API with proper JWT authentication, role-based access control, and automated email notifications. The codebase he delivered was clean, well-documented, and production-ready from day one."`
     }
   ];
 
@@ -50,49 +50,49 @@ const About: React.FC = () => {
       <TechStack3D />
 
       <section className="service">
-        <h3 className="h3 service-title">What i'm doing</h3>
+        <h3 className="h3 service-title">What I'm doing</h3>
         <ul className="service-list">
           <li className="service-item">
             <div className="service-icon-box">
-              <img src="/assets/images/icon-design.svg" alt="design icon" width="40" />
+              <img src="/assets/images/icon-dev.svg" alt="Full Stack Development icon" width="40" />
             </div>
             <div className="service-content-box">
-              <h4 className="h4 service-item-title">Web design</h4>
+              <h4 className="h4 service-item-title">Full Stack Development</h4>
               <p className="service-item-text">
-                The most modern and high-quality design made at a professional level.
+                End-to-end MERN stack engineering — from React frontends with Framer Motion animations to Express.js APIs with MongoDB, Socket.IO, and real-time data pipelines.
               </p>
             </div>
           </li>
           <li className="service-item">
             <div className="service-icon-box">
-              <img src="/assets/images/icon-dev.svg" alt="Web development icon" width="40" />
+              <img src="/assets/images/icon-design.svg" alt="AI Integration icon" width="40" />
             </div>
             <div className="service-content-box">
-              <h4 className="h4 service-item-title">Web development</h4>
+              <h4 className="h4 service-item-title">AI Integration</h4>
               <p className="service-item-text">
-                High-quality development of sites at the professional level.
+                Integrating Large Language Models (Google Gemini, OpenAI) into production applications — voice assistants, SSE streaming, intelligent automation, and predictive analytics.
               </p>
             </div>
           </li>
           <li className="service-item">
             <div className="service-icon-box">
-              <img src="/assets/images/icon-app.svg" alt="mobile app icon" width="40" />
+              <img src="/assets/images/icon-app.svg" alt="API Architecture icon" width="40" />
             </div>
             <div className="service-content-box">
-              <h4 className="h4 service-item-title">Mobile apps</h4>
+              <h4 className="h4 service-item-title">API Architecture</h4>
               <p className="service-item-text">
-                Professional development of applications for iOS and Android.
+                Designing secure, scalable RESTful APIs with JWT authentication, role-based access control, rate limiting, and automated email notification systems.
               </p>
             </div>
           </li>
           <li className="service-item">
             <div className="service-icon-box">
-              <img src="/assets/images/icon-photo.svg" alt="camera icon" width="40" />
+              <img src="/assets/images/icon-photo.svg" alt="Cloud & DevOps icon" width="40" />
             </div>
             <div className="service-content-box">
-              <h4 className="h4 service-item-title">Photography</h4>
+              <h4 className="h4 service-item-title">Cloud & DevOps</h4>
               <p className="service-item-text">
-                I make high-quality photos of any category at a professional level.
+                Production-grade Docker containerization, multi-stage builds, Nginx reverse proxy configuration, and CI/CD deployment pipelines for zero-downtime releases.
               </p>
             </div>
           </li>
@@ -163,14 +163,56 @@ const About: React.FC = () => {
       </div>
 
       <section className="clients">
-        <h3 className="h3 clients-title">Clients</h3>
+        <h3 className="h3 clients-title">Technologies I Work With</h3>
         <ul className="clients-list has-scrollbar">
-          <li className="clients-item"><a href="#"><img src="/assets/images/logo-1-color.png" alt="client logo" /></a></li>
-          <li className="clients-item"><a href="#"><img src="/assets/images/logo-2-color.png" alt="client logo" /></a></li>
-          <li className="clients-item"><a href="#"><img src="/assets/images/logo-3-color.png" alt="client logo" /></a></li>
-          <li className="clients-item"><a href="#"><img src="/assets/images/logo-4-color.png" alt="client logo" /></a></li>
-          <li className="clients-item"><a href="#"><img src="/assets/images/logo-5-color.png" alt="client logo" /></a></li>
-          <li className="clients-item"><a href="#"><img src="/assets/images/logo-6-color.png" alt="client logo" /></a></li>
+          <li className="clients-item">
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
+              <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" alt="React" width="50" />
+              <span style={{ color: 'var(--light-gray)', fontSize: '12px' }}>React</span>
+            </div>
+          </li>
+          <li className="clients-item">
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
+              <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg" alt="Node.js" width="50" />
+              <span style={{ color: 'var(--light-gray)', fontSize: '12px' }}>Node.js</span>
+            </div>
+          </li>
+          <li className="clients-item">
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
+              <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg" alt="MongoDB" width="50" />
+              <span style={{ color: 'var(--light-gray)', fontSize: '12px' }}>MongoDB</span>
+            </div>
+          </li>
+          <li className="clients-item">
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
+              <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg" alt="TypeScript" width="50" />
+              <span style={{ color: 'var(--light-gray)', fontSize: '12px' }}>TypeScript</span>
+            </div>
+          </li>
+          <li className="clients-item">
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
+              <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg" alt="Docker" width="50" />
+              <span style={{ color: 'var(--light-gray)', fontSize: '12px' }}>Docker</span>
+            </div>
+          </li>
+          <li className="clients-item">
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
+              <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/threejs/threejs-original.svg" alt="Three.js" width="50" style={{ filter: 'invert(1)' }} />
+              <span style={{ color: 'var(--light-gray)', fontSize: '12px' }}>Three.js</span>
+            </div>
+          </li>
+          <li className="clients-item">
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
+              <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nginx/nginx-original.svg" alt="Nginx" width="50" />
+              <span style={{ color: 'var(--light-gray)', fontSize: '12px' }}>Nginx</span>
+            </div>
+          </li>
+          <li className="clients-item">
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
+              <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg" alt="Git" width="50" />
+              <span style={{ color: 'var(--light-gray)', fontSize: '12px' }}>Git</span>
+            </div>
+          </li>
         </ul>
       </section>
     </article>
