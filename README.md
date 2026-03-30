@@ -2,7 +2,7 @@
 
 A high-performance, interactive, and fully-featured personal portfolio web application built from the ground up to showcase mastery of full-stack engineering, 3D WebGL, and advanced AI Integrations. 
 
-This is not a static site; it is a **dynamic, Dockerized SaaS-grade architecture** featuring a custom Content Management System (CMS), live WebSocket connections, Server-Sent Events (SSE), and a fully autonomous Google Gemini Voice AI Assistant.
+This is not a static site; it is a **dynamic, Dockerized SaaS-grade architecture** featuring a custom Content Management System (CMS), live WebSocket connections, Server-Sent Events (SSE), a fully autonomous Google Gemini Voice AI Assistant, and a hidden **physics-driven game engine** that lets users destroy the live UI.
 
 ---
 
@@ -30,6 +30,30 @@ graph TD;
 ---
 
 ## ✨ Premium Engineering Features
+
+### 🎮 Destruction Protocol — WASD Twin-Stick Shooter Easter Egg
+A hidden, full-featured **HTML5 Canvas physics engine** disguised inside the portfolio. Activated via the Command Palette, it transforms the live website into a playable arcade game.
+
+- **Twin-Stick Controls:** WASD keyboard movement with independent mouse-aim rotation (`Math.atan2` trigonometry). The player controls a geometric neon spaceship that flies freely across the screen with friction-based acceleration physics.
+- **DOM-Scraping Engine:** The Canvas engine uses `querySelectorAll` to scrape 15+ CSS selectors (`.navbar`, `.sidebar`, `.project-item`, `.timeline-item`, `.contact-item`, `.input-wrapper`, etc.) and maps their `getBoundingClientRect()` coordinates into destructible game blocks with randomized cyberpunk neon colors.
+- **Hostile AI Turret System:** Surviving UI components act as autonomous turrets — they calculate the player's real-time `(x, y)` vector position and fire targeted red plasma lasers back at the ship. Getting hit triggers a **CRITICAL FAILURE** game-over state.
+- **Spawn Invincibility Shield:** A 120-frame (2-second) protection timer with a visual blinking effect prevents instant death on launch.
+- **Particle Explosion Physics:** Destroying a DOM component spawns 30 mathematically randomized neon shrapnel particles with velocity decay and alpha fade-out.
+- **Rate-Limited Weapons:** A 150ms cooldown prevents infinite laser spam — players must aim strategically.
+- **Win/Lose States:** Destroying all visible components triggers **"SYSTEM ANNIHILATED"** (green). Getting hit by enemy fire triggers **"CRITICAL FAILURE"** (red). Both states cleanly restore the original UI.
+
+### ⌨️ Global Command Palette (`Ctrl + K`)
+A macOS Spotlight-inspired command interface with glassmorphism design, accessible from anywhere in the app.
+
+- **Fuzzy Keyboard Navigation:** Real-time filtering of commands as users type.
+- **System Commands:** Navigate pages, toggle themes (Dark/Light/Cyberpunk), download CV, and trigger the Destruction Protocol.
+- **Escape to Dismiss:** Full keyboard-first UX with `Escape` key support.
+
+### 🃏 Physics-Based Staggered Card Animations
+All portfolio grids and timeline components use **Framer Motion spring physics** for staggered "dealing" entrance animations.
+
+- **Project Cards:** Sequential scale + rotation spring animations mimicking a physical deck of cards being dealt.
+- **Resume Timeline:** Each timeline node enters with cascading delay, scale bounce, and subtle rotation using configurable spring `stiffness` and `damping` values.
 
 ### 🎙️ The "Hey DJ" Autonomous Voice AI
 The portfolio features an incredibly complex, fully integrated smart assistant powered by the Google Gemini LLM API.
@@ -71,6 +95,7 @@ VITE_API_URL=http://localhost:5000
 JWT_SECRET=super_secret_jwt_key_here
 ADMIN_PASSWORD=dhyey@admin123
 MONGO_URI=mongodb://localhost:27017/portfolio
+GEMINI_API_KEY=your_gemini_api_key_here
 ```
 
 ### Option A: Standard CLI Initialization
@@ -95,6 +120,17 @@ docker compose up -d
 
 ---
 
+## 🎮 Hidden Easter Eggs & Shortcuts
+
+| Shortcut | Action |
+| :--- | :--- |
+| `Ctrl + K` | Open the Global Command Palette |
+| Type `play` in Command Palette | Launch the Destruction Protocol game |
+| `Escape` | Close any modal or overlay |
+| Say *"Hey DJ"* | Wake the Voice AI Assistant |
+
+---
+
 ## 🛠️ Technology Stack Breakdown
 
 | Layer | Technologies |
@@ -106,8 +142,24 @@ docker compose up -d
 | **Real-Time Data** | Socket.IO, Recharts, Server-Sent Events (SSE) |
 | **AI LLM Network** | Google Gemini `genAI` API, Web Speech Recognition APIs |
 | **Email Service**  | Nodemailer |
-| **Graphics**       | Three.js (@react-three/fiber), Canvas Confetti |
+| **Graphics**       | Three.js (@react-three/fiber), HTML5 Canvas, Canvas Confetti |
+| **Physics Engine** | Custom Canvas 2D (WASD + Mouse Aim Twin-Stick Shooter) |
 | **DevOps**         | Docker, Docker Compose, Nginx Alpine |
+
+---
+
+## 📁 Key File Map
+
+| File | Purpose |
+| :--- | :--- |
+| `src/components/BreakoutGame.tsx` | Canvas physics engine — Twin-Stick Shooter with hostile AI |
+| `src/components/CommandPalette.tsx` | `Ctrl+K` global command interface |
+| `src/components/ChatbotWidget.tsx` | Gemini AI voice assistant widget |
+| `src/App.tsx` | Root orchestrator managing global states |
+| `src/pages/Resume.tsx` | Staggered spring physics timeline |
+| `server/index.js` | Express API, Socket.IO, SSE, Nodemailer |
+| `docker-compose.yml` | Full-stack container orchestration |
+| `nginx.conf` | Reverse proxy and SPA routing |
 
 ---
 
