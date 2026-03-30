@@ -93,7 +93,7 @@ Create a `.env` file utilizing the `.env.example` blueprint:
 # === Deployment Environment Variables === #
 VITE_API_URL=http://localhost:5000
 JWT_SECRET=super_secret_jwt_key_here
-ADMIN_PASSWORD=dhyey@admin123
+ADMIN_PASSWORD=dhyey@admin
 MONGO_URI=mongodb://localhost:27017/portfolio
 GEMINI_API_KEY=your_gemini_api_key_here
 ```
