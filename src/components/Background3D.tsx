@@ -10,9 +10,9 @@ function Stars({ theme, ...props }: any) {
   const ref2 = useRef<any>(null); // Layer 2: Milky Way Dust Mist (Larger, glowing blue/purple tint)
   const ref3 = useRef<any>(null); // Layer 3: Foreground Brilliant Stars (Sharp, bright white)
   
-  const [sphere1] = useState(() => random.inSphere(new Float32Array(5000), { radius: 3.5 })); 
-  const [sphere2] = useState(() => random.inSphere(new Float32Array(8000), { radius: 2.5 })); 
-  const [sphere3] = useState(() => random.inSphere(new Float32Array(2000), { radius: 1.5 })); 
+  const [sphere1] = useState(() => random.inSphere(new Float32Array(5001), { radius: 3.5 })); 
+  const [sphere2] = useState(() => random.inSphere(new Float32Array(8001), { radius: 2.5 })); 
+  const [sphere3] = useState(() => random.inSphere(new Float32Array(2001), { radius: 1.5 })); 
 
   useFrame((state, delta) => {
     // Ultra-calm, divergent rotational speeds simulating real planetary motion
