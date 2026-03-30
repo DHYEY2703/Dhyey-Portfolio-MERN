@@ -4,44 +4,57 @@ import { motion, AnimatePresence } from 'framer-motion';
 const Portfolio: React.FC = () => {
   const [filter, setFilter] = useState('All');
   const [selectActive, setSelectActive] = useState(false);
-  const [selectedProject, setSelectedProject] = useState<{ title: string; category: string; img: string; link: string } | null>(null);
+  const [selectedProject, setSelectedProject] = useState<{ title: string; category: string; img: string; link: string; description: string; techStack: string[]; liveUrl?: string } | null>(null);
 
   const projects = [
     { 
       title: 'RMS ERP System', 
       category: 'Full Stack', 
       img: '/assets/images/project-1.jpg',
-      link: 'https://github.com/DHYEY2703/RMS-ERP'
+      link: 'https://github.com/DHYEY2703/RMS-ERP',
+      description: 'A comprehensive Enterprise Resource Planning (ERP) system designed to streamline operations, manage resources, and improve organizational efficiency. It features role-based access control, real-time analytics, and automated reporting.',
+      techStack: ['React', 'Node.js', 'Express', 'MongoDB', 'Tailwind CSS']
     },
     { 
       title: 'AI Sales Forecaster', 
       category: 'AI Integration', 
       img: '/assets/images/project-2.png',
-      link: 'https://github.com/DHYEY2703/chatify-by-dhyey'
+      link: 'https://github.com/DHYEY2703/chatify-by-dhyey',
+      description: 'An intelligent sales forecasting tool that leverages machine learning algorithms to predict future sales trends based on historical data. Built with an intuitive dashboard for actionable business insights.',
+      techStack: ['Python', 'Flask', 'React', 'Scikit-learn', 'Pandas']
     },
     { 
       title: 'Attendance Management System (AMS)', 
       category: 'Full Stack', 
       img: '/assets/images/project-3.jpg',
-      link: 'https://github.com/DHYEY2703/AMS'
+      link: 'https://github.com/DHYEY2703/AMS',
+      description: 'A robust attendance tracking system with real-time logging, reporting features, and an administrative dashboard. Designed to automate the attendance process for educational institutions and small businesses.',
+      techStack: ['MERN Stack', 'JWT Auth', 'Material UI']
     },
     { 
       title: 'MERN 3D Portfolio', 
       category: 'Web Development', 
       img: '/assets/images/project-4.png',
-      link: 'https://github.com/DHYEY2703/Dhyey-Portfolio-MERN'
+      link: 'https://github.com/DHYEY2703/Dhyey-Portfolio-MERN',
+      description: 'This very portfolio! A cutting-edge personal website featuring 3D WebGL visualizations, autonomous AI voice assistance, real-time WebSockets, and a hidden interactive physics-driven game engine.',
+      techStack: ['React', 'Three.js', 'Framer Motion', 'Node.js', 'Socket.IO'],
+      liveUrl: 'https://dhyeybarbhaya.com'
     },
     { 
       title: 'E-commerce API', 
       category: 'Backend', 
       img: '/assets/images/project-5.png',
-      link: 'https://github.com/DHYEY2703/NovaHardware-Store'
+      link: 'https://github.com/DHYEY2703/NovaHardware-Store',
+      description: 'A highly scalable, production-ready REST API for an e-commerce platform. Includes features like product management, secure cart transactions, JWT authentication, and automated email receipts.',
+      techStack: ['Node.js', 'Express', 'MongoDB', 'Mongoose', 'Stripe API']
     },
     { 
       title: 'Dynamic Dashboard', 
       category: 'Web Development', 
       img: '/assets/images/project-6.png',
-      link: 'https://github.com/DHYEY2703/Feeback-System'
+      link: 'https://github.com/DHYEY2703/Feeback-System',
+      description: 'A dynamic feedback management dashboard allowing administrators to track user feedback, analyze sentiment trends, and export analytical reports in real-time.',
+      techStack: ['React', 'Chart.js', 'Node.js', 'Express']
     }
   ];
 
@@ -200,11 +213,40 @@ const Portfolio: React.FC = () => {
                 <h3 className="h2" style={{ color: 'var(--white-2)', marginBottom: '5px' }}>{selectedProject.title}</h3>
                 <p style={{ color: 'var(--orange-yellow-crayola)', fontSize: '14px', marginBottom: '20px' }}>{selectedProject.category}</p>
                 
-                <p style={{ color: 'var(--light-gray)', lineHeight: '1.6', marginBottom: '30px' }}>
-                  This is a detailed overview of {selectedProject.title}. Built with modern technologies and focused on clean architecture, this project demonstrates full-stack capabilities, scalable design, and intuitive user experiences.
+                <p style={{ color: 'var(--light-gray)', lineHeight: '1.6', marginBottom: '20px' }}>
+                  {selectedProject.description}
                 </p>
 
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '30px' }}>
+                  {selectedProject.techStack.map((tech, idx) => (
+                    <span key={idx} style={{ 
+                      background: 'var(--onyx)', 
+                      color: 'var(--orange-yellow-crayola)', 
+                      padding: '5px 12px', 
+                      borderRadius: '8px', 
+                      fontSize: '13px', 
+                      fontWeight: 500,
+                      border: '1px solid var(--jet)'
+                    }}>
+                      {tech}
+                    </span>
+                  ))}
+                </div>
+
                 <div style={{ display: 'flex', gap: '15px' }}>
+                  {selectedProject.liveUrl && (
+                    <a 
+                      href={selectedProject.liveUrl} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="form-btn"
+                      style={{ flex: 1, textDecoration: 'none', background: 'var(--orange-yellow-crayola)', color: 'var(--eerie-black-1)' }}
+                    >
+                      {/*@ts-expect-error: ion-icon custom component*/}
+                      <ion-icon name="globe-outline"></ion-icon>
+                      <span style={{ color: 'var(--eerie-black-1)' }}>Live Demo</span>
+                    </a>
+                  )}
                   <a 
                     href={selectedProject.link} 
                     target="_blank" 
