@@ -107,10 +107,16 @@ const Portfolio: React.FC = () => {
             {filteredProjects.map((project, index) => (
               <motion.li 
                 layout
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.9 }}
-                transition={{ duration: 0.3 }}
+                initial={{ opacity: 0, y: 80, scale: 0.7, rotateZ: Math.random() * 10 - 5 }}
+                animate={{ opacity: 1, y: 0, scale: 1, rotateZ: 0 }}
+                exit={{ opacity: 0, y: 50, scale: 0.8 }}
+                transition={{ 
+                  duration: 0.6, 
+                  delay: index * 0.12, // Sequential staggered dealing delay 
+                  type: "spring", 
+                  stiffness: 200, 
+                  damping: 15 
+                }}
                 className="project-item active" 
                 key={index}
                 onClick={() => setSelectedProject(project)}

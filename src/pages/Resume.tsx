@@ -1,5 +1,6 @@
 import React from 'react';
 import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer, Tooltip } from 'recharts';
+import { motion } from 'framer-motion';
 
 const skillsData = [
   { subject: 'React', val: 90, fullMark: 100 },
@@ -48,27 +49,23 @@ const Resume: React.FC = () => {
         </div>
 
         <ol className="timeline-list">
-          <li className="timeline-item">
-            <h4 className="h4 timeline-item-title">Murlidhar School</h4>
-            <span>2008 — 2010</span>
-            <p className="timeline-text">
-              The foundation of my early learning, where curiosity and creativity were nurtured. A place that shaped my first steps towards knowledge and growth.
-            </p>
-          </li>
-          <li className="timeline-item">
-            <h4 className="h4 timeline-item-title">Pathak vidhya mandir</h4>
-            <span>2011 — 2015</span>
-            <p className="timeline-text">
-              Where I built my academic foundation, embraced challenges, and grew with discipline and dedication. A place that inspired my journey of knowledge and self-discovery.
-            </p>
-          </li>
-          <li className="timeline-item">
-            <h4 className="h4 timeline-item-title">Navyug School</h4>
-            <span>2016 — 2018</span>
-            <p className="timeline-text">
-              A pivotal chapter in my education, where I honed my skills and developed a strong sense of responsibility. A place that prepared me for the challenges ahead.
-            </p>
-          </li>
+          {[
+            { title: 'Murlidhar School', year: '2008 — 2010', desc: 'The foundation of my early learning, where curiosity and creativity were nurtured. A place that shaped my first steps towards knowledge and growth.' },
+            { title: 'Pathak vidhya mandir', year: '2011 — 2015', desc: 'Where I built my academic foundation, embraced challenges, and grew with discipline and dedication. A place that inspired my journey of knowledge and self-discovery.' },
+            { title: 'Navyug School', year: '2016 — 2018', desc: 'A pivotal chapter in my education, where I honed my skills and developed a strong sense of responsibility. A place that prepared me for the challenges ahead.' }
+          ].map((item, index) => (
+            <motion.li 
+              key={index}
+              initial={{ opacity: 0, y: 70, scale: 0.8 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              transition={{ duration: 0.5, delay: index * 0.15, type: 'spring', stiffness: 200, damping: 20 }}
+              className="timeline-item"
+            >
+              <h4 className="h4 timeline-item-title">{item.title}</h4>
+              <span>{item.year}</span>
+              <p className="timeline-text">{item.desc}</p>
+            </motion.li>
+          ))}
         </ol>
       </section>
 
@@ -82,27 +79,35 @@ const Resume: React.FC = () => {
         </div>
 
         <ol className="timeline-list">
-          <li className="timeline-item">
-            <h4 className="h4 timeline-item-title">Full Stack Developer</h4>
-            <span>2023 — Present</span>
-            <p className="timeline-text">
-              Developed scalable MERN stack web applications and ERP solutions. Integrated AI components for predictive analysis, implemented modern design frameworks, and utilized responsive frontend technologies.
-            </p>
-          </li>
-          <li className="timeline-item">
-            <h4 className="h4 timeline-item-title">Frontend Developer</h4>
-            <span>2021 — 2023</span>
-            <p className="timeline-text">
-              Specialized in React, building dynamic UI components, state management using Redux, and ensuring mobile-first responsive design across enterprise applications.
-            </p>
-          </li>
+          {[
+            { title: 'Full Stack Developer', year: '2023 — Present', desc: 'Developed scalable MERN stack web applications and ERP solutions. Integrated AI components for predictive analysis, implemented modern design frameworks, and utilized responsive frontend technologies.' },
+            { title: 'Frontend Developer', year: '2021 — 2023', desc: 'Specialized in React, building dynamic UI components, state management using Redux, and ensuring mobile-first responsive design across enterprise applications.' }
+          ].map((item, index) => (
+            <motion.li 
+              key={index}
+              initial={{ opacity: 0, y: 70, scale: 0.8 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              transition={{ duration: 0.5, delay: 0.3 + (index * 0.15), type: 'spring', stiffness: 200, damping: 20 }}
+              className="timeline-item"
+            >
+              <h4 className="h4 timeline-item-title">{item.title}</h4>
+              <span>{item.year}</span>
+              <p className="timeline-text">{item.desc}</p>
+            </motion.li>
+          ))}
         </ol>
       </section>
 
       <section className="skill">
         <h3 className="h3 skills-title">Technical Skills</h3>
         
-        <div className="content-card" style={{ height: '400px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+        <motion.div 
+          initial={{ opacity: 0, scale: 0.5, rotateY: 90 }}
+          animate={{ opacity: 1, scale: 1, rotateY: 0 }}
+          transition={{ duration: 0.8, delay: 0.6, type: 'spring', bounce: 0.4 }}
+          className="content-card" 
+          style={{ height: '400px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}
+        >
           <ResponsiveContainer width="100%" height="100%">
             <RadarChart cx="50%" cy="50%" outerRadius="70%" data={skillsData}>
               <PolarGrid stroke="var(--jet)" />
@@ -115,7 +120,7 @@ const Resume: React.FC = () => {
               />
             </RadarChart>
           </ResponsiveContainer>
-        </div>
+        </motion.div>
       </section>
     </article>
   );
