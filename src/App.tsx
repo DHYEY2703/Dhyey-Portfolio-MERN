@@ -16,6 +16,7 @@ import FloatingContact from './components/FloatingContact';
 import Loader from './components/Loader';
 import { soundManager } from './utils/SoundManager';
 import ChatbotWidget from './components/ChatbotWidget';
+import CommandPalette from './components/CommandPalette';
 import confetti from 'canvas-confetti';
 import { Helmet } from 'react-helmet-async';
 
@@ -199,6 +200,7 @@ function App() {
       </Helmet>
       <CustomCursor />
       <Toaster position="top-right" />
+      <CommandPalette setActivePage={setActivePage} setTheme={setTheme} />
       {!isAdmin && <FloatingContact />}
 
       {/* EASTER EGG: The Secret Hidden Spot */}
