@@ -10,7 +10,7 @@ const Portfolio: React.FC = () => {
     { 
       title: 'RMS ERP System', 
       category: 'Full Stack', 
-      img: '/assets/images/project-1.jpg',
+      img: 'https://opengraph.githubassets.com/1/DHYEY2703/RMS-ERP',
       link: 'https://github.com/DHYEY2703/RMS-ERP',
       description: 'A comprehensive Enterprise Resource Planning (ERP) system designed to streamline operations, manage resources, and improve organizational efficiency. It features role-based access control, real-time analytics, and automated reporting.',
       techStack: ['React', 'Node.js', 'Express', 'MongoDB', 'Tailwind CSS']
@@ -18,7 +18,7 @@ const Portfolio: React.FC = () => {
     { 
       title: 'AI Sales Forecaster', 
       category: 'AI Integration', 
-      img: '/assets/images/project-2.png',
+      img: 'https://opengraph.githubassets.com/1/DHYEY2703/chatify-by-dhyey',
       link: 'https://github.com/DHYEY2703/chatify-by-dhyey',
       description: 'An intelligent sales forecasting tool that leverages machine learning algorithms to predict future sales trends based on historical data. Built with an intuitive dashboard for actionable business insights.',
       techStack: ['Python', 'Flask', 'React', 'Scikit-learn', 'Pandas']
@@ -26,7 +26,7 @@ const Portfolio: React.FC = () => {
     { 
       title: 'Attendance Management System (AMS)', 
       category: 'Full Stack', 
-      img: '/assets/images/project-3.jpg',
+      img: 'https://opengraph.githubassets.com/1/DHYEY2703/AMS',
       link: 'https://github.com/DHYEY2703/AMS',
       description: 'A robust attendance tracking system with real-time logging, reporting features, and an administrative dashboard. Designed to automate the attendance process for educational institutions and small businesses.',
       techStack: ['MERN Stack', 'JWT Auth', 'Material UI']
@@ -34,7 +34,7 @@ const Portfolio: React.FC = () => {
     { 
       title: 'MERN 3D Portfolio', 
       category: 'Web Development', 
-      img: '/assets/images/project-4.png',
+      img: 'https://opengraph.githubassets.com/1/DHYEY2703/Dhyey-Portfolio-MERN',
       link: 'https://github.com/DHYEY2703/Dhyey-Portfolio-MERN',
       description: 'This very portfolio! A cutting-edge personal website featuring 3D WebGL visualizations, autonomous AI voice assistance, real-time WebSockets, and a hidden interactive physics-driven game engine.',
       techStack: ['React', 'Three.js', 'Framer Motion', 'Node.js', 'Socket.IO'],
@@ -43,7 +43,7 @@ const Portfolio: React.FC = () => {
     { 
       title: 'E-commerce API', 
       category: 'Backend', 
-      img: '/assets/images/project-5.png',
+      img: 'https://opengraph.githubassets.com/1/DHYEY2703/NovaHardware-Store',
       link: 'https://github.com/DHYEY2703/NovaHardware-Store',
       description: 'A highly scalable, production-ready REST API for an e-commerce platform. Includes features like product management, secure cart transactions, JWT authentication, and automated email receipts.',
       techStack: ['Node.js', 'Express', 'MongoDB', 'Mongoose', 'Stripe API']
@@ -51,7 +51,7 @@ const Portfolio: React.FC = () => {
     { 
       title: 'Dynamic Dashboard', 
       category: 'Web Development', 
-      img: '/assets/images/project-6.png',
+      img: 'https://opengraph.githubassets.com/1/DHYEY2703/Feeback-System',
       link: 'https://github.com/DHYEY2703/Feeback-System',
       description: 'A dynamic feedback management dashboard allowing administrators to track user feedback, analyze sentiment trends, and export analytical reports in real-time.',
       techStack: ['React', 'Chart.js', 'Node.js', 'Express']
