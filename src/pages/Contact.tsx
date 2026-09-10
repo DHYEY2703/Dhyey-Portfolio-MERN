@@ -15,20 +15,36 @@ const Contact: React.FC = () => {
     setIsSubmitting(true);
 
     try {
+      // 1. Send Email via Web3Forms directly from the browser (Bypasses Cloudflare bot protection)
+      const emailResponse = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+          access_key: "63e2eca1-7433-4aba-b8ef-97e4bcacb8bf",
+          name: formData.fullname,
+          email: formData.email,
+          message: formData.message,
+          subject: `New Lead: ${formData.fullname} via Portfolio`,
+          from_name: 'Portfolio Contact Form'
+        })
+      });
+
+      // 2. Save to Database & Trigger Admin Notification
       const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
-      const response = await fetch(`${API_URL}/api/contact`, {
+      await fetch(`${API_URL}/api/contact`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
       });
 
-      const data = await response.json();
-
-      if (response.ok) {
+      if (emailResponse.ok) {
         toast.success('Message sent successfully!');
         setFormData({ fullname: '', email: '', message: '' });
       } else {
-        toast.error(data.error || 'Failed to send message.');
+        toast.error('Failed to send message.');
       }
     } catch {
       toast.error('Server is not reachable. Please try again later.');
